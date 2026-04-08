@@ -88,29 +88,43 @@ body {
 .balance-bar {
   flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
-  gap: 10px;
-  padding: 14px 16px;
+  padding: 12px 16px;
   background: var(--bg2);
   border-bottom: 1px solid var(--border);
 }
 
-.balance-coin { font-size: 28px; filter: drop-shadow(0 0 8px rgba(251,191,36,0.8)); }
+.balance-half {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center;
+  gap: 8px;
+}
 
-.balance-info { text-align: center; }
+.balance-divider {
+  width: 1px; height: 36px;
+  background: rgba(139,92,246,0.3);
+  flex-shrink: 0;
+  margin: 0 8px;
+}
+
+.balance-coin { font-size: 26px; filter: drop-shadow(0 0 8px rgba(251,191,36,0.8)); flex-shrink: 0; }
+.balance-coin.sat { filter: drop-shadow(0 0 8px rgba(139,92,246,0.8)); }
+
+.balance-info { text-align: left; }
 .balance-amount {
   font-family: 'Space Mono', monospace;
-  font-size: 28px; font-weight: 700;
+  font-size: 22px; font-weight: 700;
   color: var(--text);
   line-height: 1;
 }
-.balance-label { font-size: 11px; color: var(--text3); letter-spacing: 1px; margin-top: 2px; }
+.balance-label { font-size: 10px; color: var(--text3); letter-spacing: 1px; margin-top: 2px; }
 
 .balance-change {
+  position: absolute;
+  right: 16px;
   font-size: 13px; font-weight: 800;
   color: var(--green);
   opacity: 0;
   transition: opacity 0.3s;
-  min-width: 60px;
 }
 .balance-change.show { opacity: 1; }
 
@@ -127,7 +141,8 @@ body {
 .screens::-webkit-scrollbar { display: none; }
 
 .screen { display: none; padding: 16px; }
-.screen.active { display: block; }
+.screen.active { display: flex; flex-direction: column; }
+#s-tap { padding: 12px 16px; }
 
 /* ══════════════════════════════
    TAP SCREEN
@@ -201,13 +216,15 @@ body {
 /* Центральная зона тапа */
 .tap-zone {
   display: flex; flex-direction: column; align-items: center;
-  margin-bottom: 24px;
+  justify-content: center;
+  flex: 1;
+  padding-bottom: 16px;
 }
 
 .tap-ring-outer {
   position: relative;
-  width: 210px; height: 210px;
-  margin: 0 auto 20px;
+  width: 236px; height: 236px; /* золотое сечение от ширины экрана ~382px */
+  margin: 0 auto 24px;
 }
 
 /* Вращающееся кольцо */
@@ -262,21 +279,26 @@ body {
 
 /* Плюшки под кнопкой */
 .tap-chips {
-  display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  width: 100%;
+  max-width: 340px;
 }
 
 .tap-chip {
-  display: flex; align-items: center; gap: 6px;
+  display: flex; align-items: center; justify-content: center; gap: 5px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 7px 14px;
-  font-size: 13px; font-weight: 700;
+  border-radius: 14px;
+  padding: 8px 6px;
+  font-size: 12px; font-weight: 700;
+  text-align: center;
 }
 
-.tap-chip .chip-icon { font-size: 16px; }
-.tap-chip .chip-val { color: var(--blue2); font-family: 'Space Mono', monospace; }
-.tap-chip .chip-lbl { color: var(--text3); font-size: 11px; }
+.tap-chip .chip-icon { font-size: 14px; }
+.tap-chip .chip-val { color: var(--blue2); font-family: 'Space Mono', monospace; font-size: 12px; }
+.tap-chip .chip-lbl { color: var(--text3); font-size: 10px; }
 
 /* Плавающие очки */
 .float-pts {
@@ -653,16 +675,20 @@ body {
 
   <!-- BALANCE BAR -->
   <div class="balance-bar">
-    <div class="balance-coin">🪙</div>
-    <div class="balance-info">
-      <div class="balance-amount" id="balAmount">0</div>
-      <div class="balance-label">ОЧКОВ</div>
+    <div class="balance-half">
+      <div class="balance-coin">🪙</div>
+      <div class="balance-info">
+        <div class="balance-amount" id="balAmount">0</div>
+        <div class="balance-label">ОЧКОВ</div>
+      </div>
     </div>
-    <div style="width:1px;background:rgba(139,92,246,0.3);height:32px;"></div>
-    <div class="balance-coin">🪐</div>
-    <div class="balance-info">
-      <div class="balance-amount" id="balSat" style="font-size:20px;">0</div>
-      <div class="balance-label">SATANDER</div>
+    <div class="balance-divider"></div>
+    <div class="balance-half">
+      <div class="balance-coin sat">🪐</div>
+      <div class="balance-info">
+        <div class="balance-amount" id="balSat">0</div>
+        <div class="balance-label">SATANDER</div>
+      </div>
     </div>
     <div class="balance-change" id="balChange">+0</div>
   </div>
@@ -835,46 +861,46 @@ body {
 const CFG = {
   tap_power: {
     name:'Сила тапа', icon:'⚡',
-    currency:'pts',  // платится очками
+    currency:'pts',
     levels:[
-      {cost:500,   value:2, fx:'+1 очко/тап'},
-      {cost:1500,  value:3, fx:'+2 очка/тап'},
-      {cost:4000,  value:4, fx:'+3 очка/тап'},
-      {cost:10000, value:6, fx:'+5 очков/тап'},
-      {cost:25000, value:8, fx:'+7 очков/тап'},
+      {cost:250,   value:2, fx:'+1 очко/тап'},
+      {cost:405,   value:3, fx:'+2 очка/тап'},
+      {cost:655,   value:4, fx:'+3 очка/тап'},
+      {cost:1060,  value:6, fx:'+5 очков/тап'},
+      {cost:1715,  value:8, fx:'+7 очков/тап'},
     ]
   },
   energy: {
     name:'Энергия', icon:'🔋',
-    currency:'pts',  // платится очками
+    currency:'pts',
     levels:[
-      {cost:1000,  value:150, fx:'150 энергии'},
-      {cost:3000,  value:250, fx:'250 энергии'},
-      {cost:7000,  value:400, fx:'400 энергии'},
-      {cost:15000, value:600, fx:'600 энергии'},
-      {cost:35000, value:1000,fx:'1000 энергии'},
+      {cost:300,   value:150,  fx:'150 энергии'},
+      {cost:485,   value:250,  fx:'250 энергии'},
+      {cost:785,   value:400,  fx:'400 энергии'},
+      {cost:1270,  value:600,  fx:'600 энергии'},
+      {cost:2055,  value:1000, fx:'1000 энергии'},
     ]
   },
   autotap: {
     name:'Автотап', icon:'🤖',
-    currency:'sat',  // платится SATANDER
+    currency:'sat',
     levels:[
-      {cost:1,  value:5,  fx:'5 очков/час'},
-      {cost:3,  value:15, fx:'15 очков/час'},
-      {cost:7,  value:35, fx:'35 очков/час'},
-      {cost:15, value:80, fx:'80 очков/час'},
-      {cost:30, value:150,fx:'150 очков/час'},
+      {cost:1,  value:5,   fx:'5 очков/час'},
+      {cost:2,  value:10,  fx:'10 очков/час'},
+      {cost:3,  value:20,  fx:'20 очков/час'},
+      {cost:5,  value:40,  fx:'40 очков/час'},
+      {cost:8,  value:80,  fx:'80 очков/час'},
     ]
   },
   multiplier: {
     name:'Множитель', icon:'✖️',
-    currency:'sat',  // платится SATANDER
+    currency:'sat',
     levels:[
       {cost:2,  value:1.5, fx:'×1.5 ко всем очкам'},
-      {cost:5,  value:2.0, fx:'×2.0 ко всем очкам'},
-      {cost:10, value:2.5, fx:'×2.5 ко всем очкам'},
-      {cost:20, value:3.0, fx:'×3.0 ко всем очкам'},
-      {cost:40, value:4.0, fx:'×4.0 ко всем очкам'},
+      {cost:3,  value:2.0, fx:'×2.0 ко всем очкам'},
+      {cost:5,  value:2.5, fx:'×2.5 ко всем очкам'},
+      {cost:8,  value:3.0, fx:'×3.0 ко всем очкам'},
+      {cost:13, value:4.0, fx:'×4.0 ко всем очкам'},
     ]
   },
 };
