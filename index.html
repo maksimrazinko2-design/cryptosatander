@@ -52,7 +52,9 @@ body {
 
 .app { position: relative; z-index: 1; height: 100%; display: flex; flex-direction: column; max-width: 480px; margin: 0 auto; width: 100%; }
 
-/* HEADER */
+/* ══════════════════════════════
+   HEADER
+══════════════════════════════ */
 .header {
   flex-shrink: 0;
   display: flex; align-items: center; justify-content: space-between;
@@ -80,14 +82,1133 @@ body {
 }
 .user-name { font-size: 14px; font-weight: 700; color: var(--text2); }
 
-/* BALANCE BAR */
+/* ══════════════════════════════
+   BALANCE BAR
+══════════════════════════════ */
 .balance-bar {
   flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
-  padding: 12px 16px;
+  gap: 10px;
+  padding: 14px 16px;
   background: var(--bg2);
   border-bottom: 1px solid var(--border);
 }
 
-.balance-half {
+.balance-coin { font-size: 28px; filter: drop-shadow(0 0 8px rgba(251,191,36,0.8)); }
+
+.balance-info { text-align: center; }
+.balance-amount {
+  font-family: 'Space Mono', monospace;
+  font-size: 28px; font-weight: 700;
+  color: var(--text);
+  line-height: 1;
+}
+.balance-label { font-size: 11px; color: var(--text3); letter-spacing: 1px; margin-top: 2px; }
+
+.balance-change {
+  font-size: 13px; font-weight: 800;
+  color: var(--green);
+  opacity: 0;
+  transition: opacity 0.3s;
+  min-width: 60px;
+}
+.balance-change.show { opacity: 1; }
+
+/* ══════════════════════════════
+   SCREENS
+══════════════════════════════ */
+.screens {
   flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.screens::-webkit-scrollbar { display: none; }
+
+.screen { display: none; padding: 16px; }
+.screen.active { display: block; }
+
+/* ══════════════════════════════
+   TAP SCREEN
+══════════════════════════════ */
+
+/* Энергия */
+.energy-row {
+  display: flex; align-items: stretch;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+  background: var(--bg2);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  padding: 10px 14px;
+}
+
+.energy-track {
+  flex: 1; height: 10px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 5px; overflow: hidden;
+}
+
+.energy-fill {
+  height: 100%;
+  border-radius: 5px;
+  background: linear-gradient(90deg, var(--blue), var(--purple2));
+  transition: width 0.4s ease;
+  box-shadow: 0 0 8px rgba(59,130,246,0.7);
+}
+
+.energy-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px; color: var(--text2);
+  white-space: nowrap;
+}
+
+.energy-bolt { font-size: 18px; }
+
+.energy-top {
+  display: flex; align-items: center; gap: 10px;
+}
+
+.energy-timer {
+  display: flex; align-items: center; gap: 8px;
+  padding: 0 2px;
+}
+
+.energy-timer-icon { font-size: 12px; }
+
+.energy-timer-text {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px; color: var(--blue2);
+  white-space: nowrap;
+  min-width: 110px;
+}
+
+.energy-timer-track {
+  flex: 1; height: 4px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 2px; overflow: hidden;
+}
+
+.energy-timer-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--blue2), var(--purple2));
+  transition: width 0.9s linear;
+}
+
+/* Центральная зона тапа */
+.tap-zone {
+  display: flex; flex-direction: column; align-items: center;
+  margin-bottom: 24px;
+}
+
+.tap-ring-outer {
+  position: relative;
+  width: 210px; height: 210px;
+  margin: 0 auto 20px;
+}
+
+/* Вращающееся кольцо */
+.tap-ring-outer::before {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  padding: 3px;
+  background: conic-gradient(
+    var(--blue) 0%,
+    var(--purple) 25%,
+    var(--blue2) 50%,
+    var(--purple2) 75%,
+    var(--blue) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: spin 5s linear infinite;
+  opacity: 0.8;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.tap-ring-inner {
+  position: absolute;
+  inset: 10px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 35%, var(--bg3), var(--bg));
+  border: 1px solid rgba(139,92,246,0.3);
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column;
+  cursor: pointer;
+  transition: transform 0.09s ease, box-shadow 0.09s ease;
+  box-shadow:
+    0 0 30px rgba(139,92,246,0.3),
+    inset 0 -6px 20px rgba(0,0,0,0.4),
+    inset 0 4px 10px rgba(139,92,246,0.15);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tap-ring-inner:active,
+.tap-ring-inner.pressed {
+  transform: scale(0.91);
+  box-shadow:
+    0 0 60px rgba(59,130,246,0.6),
+    inset 0 6px 20px rgba(0,0,0,0.5);
+}
+
+.tap-emoji { font-size: 60px; line-height: 1; pointer-events: none; filter: drop-shadow(0 0 12px rgba(251,191,36,0.6)); }
+.tap-hint { font-size: 11px; font-weight: 800; letter-spacing: 3px; color: var(--purple3); margin-top: 6px; pointer-events: none; }
+
+/* Плюшки под кнопкой */
+.tap-chips {
+  display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
+}
+
+.tap-chip {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 7px 14px;
+  font-size: 13px; font-weight: 700;
+}
+
+.tap-chip .chip-icon { font-size: 16px; }
+.tap-chip .chip-val { color: var(--blue2); font-family: 'Space Mono', monospace; }
+.tap-chip .chip-lbl { color: var(--text3); font-size: 11px; }
+
+/* Плавающие очки */
+.float-pts {
+  position: fixed;
+  font-family: 'Space Mono', monospace;
+  font-size: 20px; font-weight: 700;
+  color: var(--gold);
+  text-shadow: 0 0 12px rgba(251,191,36,0.7);
+  pointer-events: none;
+  z-index: 999;
+  animation: floatUp 0.9s ease-out forwards;
+}
+
+@keyframes floatUp {
+  0%   { opacity: 1; transform: translateY(0) scale(1); }
+  80%  { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-90px) scale(1.2); }
+}
+
+/* ══════════════════════════════
+   UPGRADES SCREEN
+══════════════════════════════ */
+.screen-title {
+  font-size: 11px; font-weight: 800;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 14px;
+}
+
+.upgrade-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 14px;
+  transition: border-color 0.2s, background 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.upgrade-card.can-buy {
+  border-color: rgba(59,130,246,0.5);
+  background: linear-gradient(135deg, rgba(59,130,246,0.06), var(--bg2));
+}
+
+.upgrade-card.maxed {
+  border-color: rgba(52,211,153,0.3);
+  background: linear-gradient(135deg, rgba(52,211,153,0.04), var(--bg2));
+}
+
+.upg-icon {
+  width: 52px; height: 52px; border-radius: 14px; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--bg3), var(--bg4));
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+}
+
+.upg-body { flex: 1; min-width: 0; }
+.upg-name { font-size: 16px; font-weight: 800; margin-bottom: 2px; }
+.upg-effect { font-size: 12px; color: var(--blue3); margin-bottom: 8px; font-weight: 600; }
+
+.upg-dots { display: flex; gap: 4px; }
+.dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  transition: background 0.2s;
+}
+.dot.on { background: linear-gradient(135deg, var(--blue), var(--purple2)); box-shadow: 0 0 5px var(--blue); }
+
+.upg-right { flex-shrink: 0; text-align: right; }
+
+.upg-cost {
+  font-family: 'Space Mono', monospace;
+  font-size: 14px; font-weight: 700;
+  color: var(--gold); margin-bottom: 6px;
+}
+
+.upg-cost.grey { color: var(--text3); }
+
+.btn-buy {
+  padding: 8px 18px;
+  border-radius: 10px; border: none;
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px; font-weight: 800;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-buy.active {
+  background: linear-gradient(135deg, var(--blue), var(--purple));
+  color: white;
+  box-shadow: 0 4px 16px rgba(59,130,246,0.4);
+}
+
+.btn-buy.active:active { transform: scale(0.95); }
+.btn-buy.disabled { background: var(--bg4); color: var(--text3); cursor: not-allowed; }
+.btn-buy.max { background: rgba(52,211,153,0.15); color: var(--green); cursor: default; border: 1px solid rgba(52,211,153,0.3); }
+
+/* ══════════════════════════════
+   EXCHANGE SCREEN
+══════════════════════════════ */
+.exch-card {
+  background: var(--bg2);
+  border: 1px solid var(--border-b);
+  border-radius: 22px;
+  padding: 22px 18px;
+  margin-bottom: 14px;
+}
+
+.exch-rate-row {
+  display: flex; align-items: center; justify-content: center;
+  gap: 14px; margin-bottom: 18px;
+}
+
+.exch-side {
+  text-align: center; flex: 1;
+}
+
+.exch-big {
+  font-family: 'Space Mono', monospace;
+  font-size: 22px; font-weight: 700;
+  color: var(--text);
+}
+
+.exch-small { font-size: 11px; color: var(--text3); margin-top: 2px; letter-spacing: 1px; }
+
+.exch-arrow {
+  font-size: 22px; color: var(--blue2);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+
+.exch-avail {
+  text-align: center;
+  font-size: 13px; color: var(--text2);
+  font-weight: 600;
+  padding: 10px;
+  background: rgba(59,130,246,0.08);
+  border-radius: 12px;
+  border: 1px solid var(--border-b);
+}
+
+.exch-avail span { color: var(--gold); font-family: 'Space Mono', monospace; }
+
+.form-group { margin-bottom: 14px; }
+
+.form-lbl {
+  font-size: 11px; font-weight: 800; letter-spacing: 1px;
+  text-transform: uppercase; color: var(--text3);
+  margin-bottom: 8px; display: block;
+}
+
+.form-input {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 13px 16px;
+  color: var(--text);
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px; font-weight: 600;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+}
+
+.form-input::placeholder { color: var(--text3); font-weight: 600; }
+
+.input-row { display: flex; gap: 8px; }
+.input-row .form-input { flex: 1; }
+
+.btn-max {
+  padding: 13px 16px;
+  background: rgba(59,130,246,0.15);
+  border: 1px solid var(--border-b);
+  border-radius: 14px;
+  color: var(--blue2); font-family: 'Nunito', sans-serif;
+  font-size: 13px; font-weight: 800;
+  cursor: pointer; white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.btn-max:active { background: rgba(59,130,246,0.3); }
+
+.btn-exchange {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--blue), var(--purple));
+  border: none; border-radius: 16px;
+  color: white;
+  font-family: 'Nunito', sans-serif;
+  font-size: 16px; font-weight: 900;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: 0 6px 24px rgba(59,130,246,0.4);
+  transition: all 0.15s;
+  margin-top: 4px;
+}
+
+.btn-exchange:active { transform: scale(0.97); box-shadow: 0 2px 10px rgba(59,130,246,0.3); }
+.btn-exchange:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+/* ══════════════════════════════
+   PROFILE SCREEN
+══════════════════════════════ */
+.profile-top {
+  text-align: center;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 24px 16px 20px;
+  margin-bottom: 14px;
+}
+
+.profile-ava {
+  width: 76px; height: 76px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue), var(--purple));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px;
+  margin: 0 auto 12px;
+  box-shadow: 0 0 24px rgba(59,130,246,0.5), 0 0 48px rgba(139,92,246,0.3);
+}
+
+.profile-name { font-size: 20px; font-weight: 900; margin-bottom: 4px; }
+.profile-sub { font-size: 12px; color: var(--text3); letter-spacing: 1px; }
+
+.stats-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 10px; margin-bottom: 14px;
+}
+
+.stat-box {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px;
+}
+
+.stat-box-icon { font-size: 20px; margin-bottom: 6px; }
+.stat-box-val {
+  font-family: 'Space Mono', monospace;
+  font-size: 18px; font-weight: 700;
+  color: var(--text); margin-bottom: 2px;
+}
+
+.stat-box-lbl { font-size: 11px; color: var(--text3); font-weight: 700; letter-spacing: 0.5px; }
+
+.ref-box {
+  background: var(--bg2);
+  border: 1px solid var(--border-b);
+  border-radius: 20px;
+  padding: 18px;
+}
+
+.ref-box-title {
+  font-size: 15px; font-weight: 800;
+  color: var(--blue2); margin-bottom: 6px;
+}
+
+.ref-box-desc {
+  font-size: 13px; color: var(--text2); font-weight: 600;
+  line-height: 1.5; margin-bottom: 14px;
+}
+
+.ref-box-desc b { color: var(--gold); }
+
+.ref-link-box {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px; color: var(--purple3);
+  word-break: break-all;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.btn-copy {
+  width: 100%;
+  padding: 13px;
+  background: rgba(139,92,246,0.15);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  color: var(--purple3);
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px; font-weight: 800;
+  cursor: pointer; letter-spacing: 0.5px;
+  transition: background 0.15s;
+}
+
+.btn-copy:active { background: rgba(139,92,246,0.3); }
+
+/* ══════════════════════════════
+   BOTTOM NAV
+══════════════════════════════ */
+.nav {
+  flex-shrink: 0;
+  display: flex;
+  background: rgba(24,14,46,0.97);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+}
+
+.nav-item {
+  flex: 1;
+  padding: 10px 4px 13px;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  cursor: pointer;
+  border: none; background: transparent;
+  color: var(--text3);
+  transition: color 0.2s;
+  position: relative;
+}
+
+.nav-item.active { color: var(--text); }
+
+.nav-item.active::after {
+  content: '';
+  position: absolute; bottom: 0; left: 25%; right: 25%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--blue), var(--purple2));
+  border-radius: 2px 2px 0 0;
+}
+
+.nav-icon { font-size: 22px; line-height: 1; }
+.nav-lbl { font-size: 10px; font-weight: 800; letter-spacing: 0.5px; }
+
+/* ══════════════════════════════
+   TOAST
+══════════════════════════════ */
+.toast {
+  position: fixed; bottom: 82px; left: 50%;
+  transform: translateX(-50%) translateY(16px);
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 11px 22px;
+  font-size: 14px; font-weight: 700;
+  color: var(--text);
+  opacity: 0;
+  transition: all 0.25s;
+  z-index: 200;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.ok   { color: var(--green); border-color: rgba(52,211,153,0.4); }
+.toast.err  { color: var(--red);   border-color: rgba(248,113,113,0.4); }
+</style>
+</head>
+<body>
+<div class="bg-glow"></div>
+
+<div class="app">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo">SAT<b>ANDER</b></div>
+    <div class="user-info">
+      <div class="user-name" id="uName">Игрок</div>
+      <div class="user-avatar">🪐</div>
+    </div>
+  </div>
+
+  <!-- BALANCE BAR -->
+  <div class="balance-bar">
+    <div class="balance-coin">🪙</div>
+    <div class="balance-info">
+      <div class="balance-amount" id="balAmount">0</div>
+      <div class="balance-label">ОЧКОВ</div>
+    </div>
+    <div style="width:1px;background:rgba(139,92,246,0.3);height:32px;"></div>
+    <div class="balance-coin">🪐</div>
+    <div class="balance-info">
+      <div class="balance-amount" id="balSat" style="font-size:20px;">0</div>
+      <div class="balance-label">SATANDER</div>
+    </div>
+    <div class="balance-change" id="balChange">+0</div>
+  </div>
+
+  <!-- SCREENS -->
+  <div class="screens">
+
+    <!-- ── TAP ── -->
+    <div class="screen active" id="s-tap">
+
+      <div class="energy-row">
+        <div class="energy-top">
+          <span class="energy-bolt">⚡</span>
+          <div class="energy-track">
+            <div class="energy-fill" id="eFill" style="width:100%"></div>
+          </div>
+          <span class="energy-label" id="eLabel">100/100</span>
+        </div>
+        <div class="energy-timer" id="eTimerRow">
+          <span class="energy-timer-icon">⏱</span>
+          <span class="energy-timer-text" id="eTimerText">+1 через 36с</span>
+          <div class="energy-timer-track">
+            <div class="energy-timer-fill" id="eTimerFill" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tap-zone">
+        <div class="tap-ring-outer">
+          <div class="tap-ring-inner" id="tapBtn" ontouchstart="onTap(event)" onclick="onTap(event)">
+            <div class="tap-emoji">🪙</div>
+            <div class="tap-hint">НАЖМИ</div>
+          </div>
+        </div>
+
+        <div class="tap-chips">
+          <div class="tap-chip">
+            <span class="chip-icon">⚡</span>
+            <span class="chip-val" id="chipTap">+1</span>
+            <span class="chip-lbl">за тап</span>
+          </div>
+          <div class="tap-chip">
+            <span class="chip-icon">🤖</span>
+            <span class="chip-val" id="chipAuto">0</span>
+            <span class="chip-lbl">/час</span>
+          </div>
+          <div class="tap-chip">
+            <span class="chip-icon">✖️</span>
+            <span class="chip-val" id="chipMult">×1</span>
+            <span class="chip-lbl">множитель</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── UPGRADES ── -->
+    <div class="screen" id="s-upgrades">
+      <div class="screen-title">Улучшения</div>
+      <div id="upgList"></div>
+    </div>
+
+    <!-- ── EXCHANGE ── -->
+    <div class="screen" id="s-exchange">
+      <div class="exch-card">
+        <div class="exch-rate-row">
+          <div class="exch-side">
+            <div class="exch-big" id="exchRate">1000 🪙</div>
+            <div class="exch-small">ОЧКОВ</div>
+          </div>
+          <div class="exch-arrow">➜</div>
+          <div class="exch-side">
+            <div class="exch-big">1 🪐</div>
+            <div class="exch-small">SATANDER</div>
+          </div>
+        </div>
+        <div class="exch-avail">
+          Доступно к обмену: <span id="availTok">0</span> SATANDER
+        </div>
+      </div>
+
+      <div class="exch-card">
+        <div class="form-group">
+          <label class="form-lbl">Кошелёк DecimalChain</label>
+          <input class="form-input" id="wInput" placeholder="0x..." type="text" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label class="form-lbl">Количество токенов</label>
+          <div class="input-row">
+            <input class="form-input" id="aInput" placeholder="1" type="number" min="1">
+            <button class="btn-max" onclick="setMax()">МАКС</button>
+          </div>
+        </div>
+        <button class="btn-exchange" onclick="doExchange()">⚡ Обменять</button>
+      </div>
+    </div>
+
+    <!-- ── PROFILE ── -->
+    <div class="screen" id="s-profile">
+      <div class="profile-top">
+        <div class="profile-ava">🪐</div>
+        <div class="profile-name" id="pName">Игрок</div>
+        <div class="profile-sub" id="pId">ID: —</div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-box-icon">💰</div>
+          <div class="stat-box-val" id="pBal">0</div>
+          <div class="stat-box-lbl">Баланс</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-box-icon">🏅</div>
+          <div class="stat-box-val" id="pTotal">0</div>
+          <div class="stat-box-lbl">Всего заработано</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-box-icon">🪐</div>
+          <div class="stat-box-val" id="pTokens">0</div>
+          <div class="stat-box-lbl">Токенов получено</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-box-icon">👥</div>
+          <div class="stat-box-val" id="pRefs">0</div>
+          <div class="stat-box-lbl">Рефералов</div>
+        </div>
+      </div>
+
+      <div class="ref-box">
+        <div class="ref-box-title">👥 Приглашай друзей</div>
+        <div class="ref-box-desc">Получай <b>50 очков</b> за каждого друга который зайдёт по твоей ссылке!</div>
+        <div class="ref-link-box" id="refLink">Загрузка...</div>
+        <button class="btn-copy" onclick="copyRef()">📋 Скопировать ссылку</button>
+      </div>
+    </div>
+
+  </div><!-- /screens -->
+
+  <!-- BOTTOM NAV -->
+  <div class="nav">
+    <button class="nav-item active" onclick="goTab('tap',this)">
+      <span class="nav-icon">👆</span>
+      <span class="nav-lbl">ТАП</span>
+    </button>
+    <button class="nav-item" onclick="goTab('upgrades',this)">
+      <span class="nav-icon">⬆️</span>
+      <span class="nav-lbl">АПГРЕЙДЫ</span>
+    </button>
+    <button class="nav-item" onclick="goTab('exchange',this)">
+      <span class="nav-icon">💱</span>
+      <span class="nav-lbl">ОБМЕН</span>
+    </button>
+    <button class="nav-item" onclick="goTab('profile',this)">
+      <span class="nav-icon">👤</span>
+      <span class="nav-lbl">ПРОФИЛЬ</span>
+    </button>
+  </div>
+
+</div><!-- /app -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════
+// КОНФИГ УЛУЧШЕНИЙ
+// ═══════════════════════════════════════
+// ═══════════════════════════════════════
+// КОНФИГ УЛУЧШЕНИЙ
+// pts = за очки, sat = за SATANDER
+// ═══════════════════════════════════════
+const CFG = {
+  tap_power: {
+    name:'Сила тапа', icon:'⚡',
+    currency:'pts',  // платится очками
+    levels:[
+      {cost:500,   value:2, fx:'+1 очко/тап'},
+      {cost:1500,  value:3, fx:'+2 очка/тап'},
+      {cost:4000,  value:4, fx:'+3 очка/тап'},
+      {cost:10000, value:6, fx:'+5 очков/тап'},
+      {cost:25000, value:8, fx:'+7 очков/тап'},
+    ]
+  },
+  energy: {
+    name:'Энергия', icon:'🔋',
+    currency:'pts',  // платится очками
+    levels:[
+      {cost:1000,  value:150, fx:'150 энергии'},
+      {cost:3000,  value:250, fx:'250 энергии'},
+      {cost:7000,  value:400, fx:'400 энергии'},
+      {cost:15000, value:600, fx:'600 энергии'},
+      {cost:35000, value:1000,fx:'1000 энергии'},
+    ]
+  },
+  autotap: {
+    name:'Автотап', icon:'🤖',
+    currency:'sat',  // платится SATANDER
+    levels:[
+      {cost:1,  value:5,  fx:'5 очков/час'},
+      {cost:3,  value:15, fx:'15 очков/час'},
+      {cost:7,  value:35, fx:'35 очков/час'},
+      {cost:15, value:80, fx:'80 очков/час'},
+      {cost:30, value:150,fx:'150 очков/час'},
+    ]
+  },
+  multiplier: {
+    name:'Множитель', icon:'✖️',
+    currency:'sat',  // платится SATANDER
+    levels:[
+      {cost:2,  value:1.5, fx:'×1.5 ко всем очкам'},
+      {cost:5,  value:2.0, fx:'×2.0 ко всем очкам'},
+      {cost:10, value:2.5, fx:'×2.5 ко всем очкам'},
+      {cost:20, value:3.0, fx:'×3.0 ко всем очкам'},
+      {cost:40, value:4.0, fx:'×4.0 ко всем очкам'},
+    ]
+  },
+};
+
+const RATE   = 1000; // 1000 очков = 1 SATANDER
+const BASE_E = 100;
+const REGEN_H = 100; // 1 энергия каждые 36 секунд
+
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+function loadState() {
+  const def = {
+    pts:0, total:0, sat:0, tokensGot:0, refs:0,
+    energy:BASE_E, eTs:Date.now(), autoTs:Date.now(),
+    tap_power_lvl:0, autotap_lvl:0, multiplier_lvl:0, energy_lvl:0,
+  };
+  try { return {...def, ...JSON.parse(localStorage.getItem('sat_v2')||'{}')}; }
+  catch { return def; }
+}
+function save() { localStorage.setItem('sat_v2', JSON.stringify(G)); }
+
+let G = loadState();
+
+// ═══════════════════════════════════════
+// ГЕТТЕРЫ
+// ═══════════════════════════════════════
+const mult  = () => G.multiplier_lvl ? CFG.multiplier.levels[G.multiplier_lvl-1].value : 1;
+const tapPt = () => (G.tap_power_lvl ? CFG.tap_power.levels[G.tap_power_lvl-1].value : 1) * mult();
+const maxE  = () => G.energy_lvl ? CFG.energy.levels[G.energy_lvl-1].value : BASE_E;
+const autoH = () => G.autotap_lvl ? Math.floor(CFG.autotap.levels[G.autotap_lvl-1].value * mult()) : 0;
+
+function fmt(n) {
+  n = Math.floor(n);
+  if(n>=1e6) return (n/1e6).toFixed(2)+'M';
+  if(n>=1e3) return (n/1e3).toFixed(1)+'K';
+  return ''+n;
+}
+
+// ═══════════════════════════════════════
+// РЕСТОР ЭНЕРГИИ + АВТОТАП
+// ═══════════════════════════════════════
+function tick() {
+  const now = Date.now();
+  // энергия
+  const hrs = (now - G.eTs) / 3600000;
+  const regen = Math.floor(hrs * REGEN_H);
+  if (regen > 0) {
+    G.energy = Math.min(G.energy + regen, maxE());
+    G.eTs = now;
+  }
+  // автотап
+  const autoHrs = (now - G.autoTs) / 3600000;
+  const earned  = autoHrs * autoH();
+  if (earned >= 1) {
+    G.pts   += earned;
+    G.total += earned;
+    G.autoTs = now;
+    save();
+    return Math.floor(earned);
+  }
+  return 0;
+}
+
+// ═══════════════════════════════════════
+// ТАП
+// ═══════════════════════════════════════
+let lastTap = 0;
+
+function onTap(e) {
+  e.preventDefault();
+  const now = Date.now();
+  if (now - lastTap < 80) return; // debounce
+  lastTap = now;
+
+  tick();
+  const e_ = Math.min(G.energy, maxE());
+  if (e_ < 1) { toast('🔋 Нет энергии! Восстанавливается...','err'); return; }
+
+  const pts = tapPt();
+  G.pts    += pts;
+  G.total  += pts;
+  G.energy  = e_ - 1;
+  save();
+
+  // анимация кнопки
+  const btn = document.getElementById('tapBtn');
+  btn.classList.add('pressed');
+  setTimeout(() => btn.classList.remove('pressed'), 120);
+
+  // плюс очки
+  const touch = e.touches ? e.touches[0] : e;
+  spawnFloat(touch.clientX||window.innerWidth/2, touch.clientY||200, '+'+fmt(pts));
+
+  // balance change flash
+  const bc = document.getElementById('balChange');
+  bc.textContent = '+'+fmt(pts);
+  bc.classList.add('show');
+  clearTimeout(bc._t);
+  bc._t = setTimeout(() => bc.classList.remove('show'), 700);
+
+  updateUI();
+}
+
+function spawnFloat(x, y, txt) {
+  const el = document.createElement('div');
+  el.className = 'float-pts';
+  el.textContent = txt;
+  el.style.left = (x-24)+'px';
+  el.style.top  = (y-20)+'px';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 950);
+}
+
+// ═══════════════════════════════════════
+// АПГРЕЙДЫ
+// ═══════════════════════════════════════
+function renderUpgrades() {
+  const list = document.getElementById('upgList');
+  list.innerHTML = '';
+
+  // Заголовки секций
+  const sections = {
+    pts: { label: '🪙 За очки', keys: ['tap_power','energy'] },
+    sat: { label: '🪐 За SATANDER', keys: ['autotap','multiplier'] },
+  };
+
+  for (const [sec, secData] of Object.entries(sections)) {
+    const secTitle = document.createElement('div');
+    secTitle.className = 'screen-title';
+    secTitle.style.marginTop = '16px';
+    secTitle.textContent = secData.label;
+    list.appendChild(secTitle);
+
+    for (const key of secData.keys) {
+      const cfg  = CFG[key];
+      const lvl  = G[key+'_lvl'];
+      const isMax = lvl >= cfg.levels.length;
+      const next  = isMax ? null : cfg.levels[lvl];
+      const bal   = cfg.currency === 'sat' ? G.sat : G.pts;
+      const ok    = next && bal >= next.cost;
+      const unit  = cfg.currency === 'sat' ? '🪐' : '🪙';
+
+      const card = document.createElement('div');
+      card.className = 'upgrade-card' + (isMax?' maxed':ok?' can-buy':'');
+
+      const dots = cfg.levels.map((_,i) =>
+        `<div class="dot ${i<lvl?'on':''}"></div>`).join('');
+
+      card.innerHTML = `
+        <div class="upg-icon">${cfg.icon}</div>
+        <div class="upg-body">
+          <div class="upg-name">${cfg.name}</div>
+          <div class="upg-effect">${isMax ? '✅ Максимальный уровень' : next.fx}</div>
+          <div class="upg-dots">${dots}</div>
+        </div>
+        <div class="upg-right">
+          ${isMax
+            ? `<button class="btn-buy max">МАКС</button>`
+            : `<div class="upg-cost ${ok?'':'grey'}">${unit} ${fmt(next.cost)}</div>
+               <button class="btn-buy ${ok?'active':'disabled'}"
+                 onclick="buyUpg('${key}')" ${ok?'':'disabled'}>КУПИТЬ</button>`
+          }
+        </div>`;
+      list.appendChild(card);
+    }
+  }
+}
+
+function buyUpg(key) {
+  const lvl  = G[key+'_lvl'];
+  const cfg  = CFG[key];
+  if (lvl >= cfg.levels.length) return;
+  const cost = cfg.levels[lvl].cost;
+  const isSat = cfg.currency === 'sat';
+  const bal   = isSat ? G.sat : G.pts;
+  const unit  = isSat ? 'SATANDER' : 'очков';
+
+  if (bal < cost) {
+    toast(`❌ Недостаточно ${unit}!`, 'err');
+    return;
+  }
+  if (isSat) G.sat -= cost;
+  else G.pts -= cost;
+  G[key+'_lvl']++;
+  save();
+  toast('✅ Улучшение куплено!', 'ok');
+  renderUpgrades();
+  updateUI();
+}
+
+// ═══════════════════════════════════════
+// ОБМЕН
+// ═══════════════════════════════════════
+function setMax() {
+  document.getElementById('aInput').value = Math.floor(G.pts / RATE);
+}
+
+function doExchange() {
+  const w   = document.getElementById('wInput').value.trim();
+  const amt = parseInt(document.getElementById('aInput').value)||0;
+  const avail = Math.floor(G.pts / RATE);
+
+  if (!w.startsWith('0x') || w.length < 30) { toast('❌ Неверный адрес кошелька (начинается с 0x)','err'); return; }
+  if (amt < 1)     { toast('❌ Введи количество токенов','err'); return; }
+  if (amt > avail) { toast('❌ Недостаточно очков','err'); return; }
+
+  G.pts -= amt * RATE;
+  G.sat += amt;
+  G.tokensGot += amt;
+  save();
+
+  if (window.Telegram?.WebApp) {
+    window.Telegram.WebApp.sendData(JSON.stringify({action:'exchange',wallet:w,tokens:amt}));
+  }
+
+  toast(`✅ Заявка на ${amt} SATANDER отправлена!`,'ok');
+  document.getElementById('wInput').value = '';
+  document.getElementById('aInput').value = '';
+  updateUI();
+}
+
+// ═══════════════════════════════════════
+// UI UPDATE
+// ═══════════════════════════════════════
+function updateUI() {
+  const autoEarned = tick();
+  if (autoEarned > 0) toast(`🤖 Автотап: +${fmt(autoEarned)} очков`,'ok');
+
+  const pts = Math.floor(G.pts);
+  const e   = Math.min(G.energy, maxE());
+  const me  = maxE();
+
+  // balance
+  document.getElementById('balAmount').textContent = fmt(pts);
+  document.getElementById('balSat').textContent = fmt(G.sat||0);
+
+  // energy
+  document.getElementById('eFill').style.width = (e/me*100).toFixed(1)+'%';
+  document.getElementById('eLabel').textContent = `${e}/${me}`;
+
+  // energy timer
+  const me2 = maxE();
+  const e2  = Math.min(G.energy, me2);
+  if (e2 >= me2) {
+    // энергия полная — таймер скрыт
+    document.getElementById('eTimerRow').style.opacity = '0.4';
+    document.getElementById('eTimerText').textContent = '🔋 Энергия полная';
+    document.getElementById('eTimerFill').style.width = '100%';
+  } else {
+    // секунд на 1 единицу = 3600 / REGEN_H
+    const secsPerUnit = Math.round(3600 / REGEN_H);
+    const now2 = Date.now();
+    const secsSinceRegen = ((now2 - G.eTs) / 1000) % secsPerUnit;
+    const secsLeft = Math.ceil(secsPerUnit - secsSinceRegen);
+    const pct = ((secsPerUnit - secsLeft) / secsPerUnit * 100).toFixed(1);
+    document.getElementById('eTimerRow').style.opacity = '1';
+    document.getElementById('eTimerText').textContent = `+1 через ${secsLeft}с`;
+    document.getElementById('eTimerFill').style.width = pct + '%';
+  }
+  document.getElementById('chipTap').textContent  = '+'+fmt(tapPt());
+  document.getElementById('chipAuto').textContent = fmt(autoH());
+  document.getElementById('chipMult').textContent = '×'+mult();
+
+  // exchange
+  document.getElementById('availTok').textContent = Math.floor(pts/RATE);
+
+  // profile
+  document.getElementById('pBal').textContent    = fmt(pts);
+  document.getElementById('pTotal').textContent  = fmt(G.total);
+  document.getElementById('pTokens').textContent = fmt(G.sat||0);
+  document.getElementById('pRefs').textContent   = G.refs||0;
+}
+
+// ═══════════════════════════════════════
+// НАВИГАЦИЯ
+// ═══════════════════════════════════════
+function goTab(name, el) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('s-'+name).classList.add('active');
+  el.classList.add('active');
+  if (name==='upgrades') renderUpgrades();
+  document.querySelector('.screens').scrollTop = 0;
+}
+
+// ═══════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════
+function toast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show '+(type||'');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.className='toast', 2500);
+}
+
+// ═══════════════════════════════════════
+// РЕФЕРАЛКА
+// ═══════════════════════════════════════
+function copyRef() {
+  const link = document.getElementById('refLink').textContent;
+  navigator.clipboard?.writeText(link).then(() => toast('📋 Ссылка скопирована!','ok'));
+}
+
+// ═══════════════════════════════════════
+// TELEGRAM INIT
+// ═══════════════════════════════════════
+function init() {
+  const tg = window.Telegram?.WebApp;
+  if (tg) {
+    tg.ready();
+    tg.expand();
+    tg.setHeaderColor?.('#1c1033');
+    tg.setBackgroundColor?.('#1c1033');
+    const u = tg.initDataUnsafe?.user;
+    if (u) {
+      const n = u.first_name || 'Игрок';
+      document.getElementById('uName').textContent = n;
+      document.getElementById('pName').textContent = n;
+      document.getElementById('pId').textContent   = 'ID: '+u.id;
+    }
+    const uid = tg.initDataUnsafe?.user?.id || '0';
+    // ⚠️ Замени YOUR_BOT_USERNAME на username своего бота!
+    document.getElementById('refLink').textContent = `https://t.me/YOUR_BOT_USERNAME?start=ref${uid}`;
+  } else {
+    document.getElementById('refLink').textContent = 'Открой в Telegram для реферальной ссылки';
+  }
+
+  updateUI();
+  setInterval(updateUI, 1000);
+}
+
+init();
+</script>
+</body>
+</html>
