@@ -115,7 +115,7 @@ body {
 .balance-change.show { opacity: 1; }
 
 /* ══════════════════════════════
-   SCREENS 
+   SCREENS
 ══════════════════════════════ */
 .screens {
   flex: 1;
@@ -656,7 +656,13 @@ body {
     <div class="balance-coin">🪙</div>
     <div class="balance-info">
       <div class="balance-amount" id="balAmount">0</div>
-      <div class="balance-label">SATANDER POINTS</div>
+      <div class="balance-label">ОЧКОВ</div>
+    </div>
+    <div style="width:1px;background:rgba(139,92,246,0.3);height:32px;"></div>
+    <div class="balance-coin">🪐</div>
+    <div class="balance-info">
+      <div class="balance-amount" id="balSat" style="font-size:20px;">0</div>
+      <div class="balance-label">SATANDER</div>
     </div>
     <div class="balance-change" id="balChange">+0</div>
   </div>
@@ -723,7 +729,7 @@ body {
       <div class="exch-card">
         <div class="exch-rate-row">
           <div class="exch-side">
-            <div class="exch-big">100 🪙</div>
+            <div class="exch-big" id="exchRate">1000 🪙</div>
             <div class="exch-small">ОЧКОВ</div>
           </div>
           <div class="exch-arrow">➜</div>
@@ -822,66 +828,74 @@ body {
 // ═══════════════════════════════════════
 // КОНФИГ УЛУЧШЕНИЙ
 // ═══════════════════════════════════════
+// ═══════════════════════════════════════
+// КОНФИГ УЛУЧШЕНИЙ
+// pts = за очки, sat = за SATANDER
+// ═══════════════════════════════════════
 const CFG = {
   tap_power: {
     name:'Сила тапа', icon:'⚡',
+    currency:'pts',  // платится очками
     levels:[
-      {cost:50,  value:2,  fx:'+1 очко/тап'},
-      {cost:150, value:3,  fx:'+2 очка/тап'},
-      {cost:400, value:5,  fx:'+4 очка/тап'},
-      {cost:1000,value:8,  fx:'+7 очков/тап'},
-      {cost:2500,value:15, fx:'+14 очков/тап'},
-    ]
-  },
-  autotap: {
-    name:'Автотап', icon:'🤖',
-    levels:[
-      {cost:200,  value:10,  fx:'10 очков/час'},
-      {cost:600,  value:30,  fx:'30 очков/час'},
-      {cost:1500, value:80,  fx:'80 очков/час'},
-      {cost:4000, value:200, fx:'200 очков/час'},
-      {cost:10000,value:600, fx:'600 очков/час'},
-    ]
-  },
-  multiplier: {
-    name:'Множитель', icon:'✖️',
-    levels:[
-      {cost:300,  value:1.5, fx:'×1.5 ко всем очкам'},
-      {cost:900,  value:2.0, fx:'×2.0 ко всем очкам'},
-      {cost:2500, value:3.0, fx:'×3.0 ко всем очкам'},
-      {cost:7000, value:5.0, fx:'×5.0 ко всем очкам'},
-      {cost:20000,value:10,  fx:'×10 ко всем очкам'},
+      {cost:500,   value:2, fx:'+1 очко/тап'},
+      {cost:1500,  value:3, fx:'+2 очка/тап'},
+      {cost:4000,  value:4, fx:'+3 очка/тап'},
+      {cost:10000, value:6, fx:'+5 очков/тап'},
+      {cost:25000, value:8, fx:'+7 очков/тап'},
     ]
   },
   energy: {
     name:'Энергия', icon:'🔋',
+    currency:'pts',  // платится очками
     levels:[
-      {cost:100, value:200,  fx:'200 энергии'},
-      {cost:350, value:400,  fx:'400 энергии'},
-      {cost:800, value:700,  fx:'700 энергии'},
-      {cost:2000,value:1200, fx:'1200 энергии'},
-      {cost:5000,value:2000, fx:'2000 энергии'},
+      {cost:1000,  value:150, fx:'150 энергии'},
+      {cost:3000,  value:250, fx:'250 энергии'},
+      {cost:7000,  value:400, fx:'400 энергии'},
+      {cost:15000, value:600, fx:'600 энергии'},
+      {cost:35000, value:1000,fx:'1000 энергии'},
     ]
-  }
+  },
+  autotap: {
+    name:'Автотап', icon:'🤖',
+    currency:'sat',  // платится SATANDER
+    levels:[
+      {cost:1,  value:5,  fx:'5 очков/час'},
+      {cost:3,  value:15, fx:'15 очков/час'},
+      {cost:7,  value:35, fx:'35 очков/час'},
+      {cost:15, value:80, fx:'80 очков/час'},
+      {cost:30, value:150,fx:'150 очков/час'},
+    ]
+  },
+  multiplier: {
+    name:'Множитель', icon:'✖️',
+    currency:'sat',  // платится SATANDER
+    levels:[
+      {cost:2,  value:1.5, fx:'×1.5 ко всем очкам'},
+      {cost:5,  value:2.0, fx:'×2.0 ко всем очкам'},
+      {cost:10, value:2.5, fx:'×2.5 ко всем очкам'},
+      {cost:20, value:3.0, fx:'×3.0 ко всем очкам'},
+      {cost:40, value:4.0, fx:'×4.0 ко всем очкам'},
+    ]
+  },
 };
 
-const RATE = 10000;
+const RATE   = 1000; // 1000 очков = 1 SATANDER
 const BASE_E = 100;
-const REGEN_H = 100;
+const REGEN_H = 100; // 1 энергия каждые 36 секунд
 
 // ═══════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════
 function loadState() {
   const def = {
-    pts:0, total:0, tokensGot:0, refs:0,
+    pts:0, total:0, sat:0, tokensGot:0, refs:0,
     energy:BASE_E, eTs:Date.now(), autoTs:Date.now(),
     tap_power_lvl:0, autotap_lvl:0, multiplier_lvl:0, energy_lvl:0,
   };
-  try { return {...def, ...JSON.parse(localStorage.getItem('sat_v1')||'{}')}; }
+  try { return {...def, ...JSON.parse(localStorage.getItem('sat_v2')||'{}')}; }
   catch { return def; }
 }
-function save() { localStorage.setItem('sat_v1', JSON.stringify(G)); }
+function save() { localStorage.setItem('sat_v2', JSON.stringify(G)); }
 
 let G = loadState();
 
@@ -981,34 +995,52 @@ function spawnFloat(x, y, txt) {
 function renderUpgrades() {
   const list = document.getElementById('upgList');
   list.innerHTML = '';
-  for (const [key, cfg] of Object.entries(CFG)) {
-    const lvl = G[key+'_lvl'];
-    const isMax = lvl >= cfg.levels.length;
-    const next  = isMax ? null : cfg.levels[lvl];
-    const ok    = next && G.pts >= next.cost;
 
-    const card = document.createElement('div');
-    card.className = 'upgrade-card' + (isMax?' maxed':ok?' can-buy':'');
+  // Заголовки секций
+  const sections = {
+    pts: { label: '🪙 За очки', keys: ['tap_power','energy'] },
+    sat: { label: '🪐 За SATANDER', keys: ['autotap','multiplier'] },
+  };
 
-    const dots = cfg.levels.map((_,i) =>
-      `<div class="dot ${i<lvl?'on':''}"></div>`).join('');
+  for (const [sec, secData] of Object.entries(sections)) {
+    const secTitle = document.createElement('div');
+    secTitle.className = 'screen-title';
+    secTitle.style.marginTop = '16px';
+    secTitle.textContent = secData.label;
+    list.appendChild(secTitle);
 
-    card.innerHTML = `
-      <div class="upg-icon">${cfg.icon}</div>
-      <div class="upg-body">
-        <div class="upg-name">${cfg.name}</div>
-        <div class="upg-effect">${isMax ? '✅ Максимальный уровень' : next.fx}</div>
-        <div class="upg-dots">${dots}</div>
-      </div>
-      <div class="upg-right">
-        ${isMax
-          ? `<button class="btn-buy max">МАКС</button>`
-          : `<div class="upg-cost ${ok?'':'grey'}">🪙 ${fmt(next.cost)}</div>
-             <button class="btn-buy ${ok?'active':'disabled'}"
-               onclick="buyUpg('${key}')" ${ok?'':'disabled'}>КУПИТЬ</button>`
-        }
-      </div>`;
-    list.appendChild(card);
+    for (const key of secData.keys) {
+      const cfg  = CFG[key];
+      const lvl  = G[key+'_lvl'];
+      const isMax = lvl >= cfg.levels.length;
+      const next  = isMax ? null : cfg.levels[lvl];
+      const bal   = cfg.currency === 'sat' ? G.sat : G.pts;
+      const ok    = next && bal >= next.cost;
+      const unit  = cfg.currency === 'sat' ? '🪐' : '🪙';
+
+      const card = document.createElement('div');
+      card.className = 'upgrade-card' + (isMax?' maxed':ok?' can-buy':'');
+
+      const dots = cfg.levels.map((_,i) =>
+        `<div class="dot ${i<lvl?'on':''}"></div>`).join('');
+
+      card.innerHTML = `
+        <div class="upg-icon">${cfg.icon}</div>
+        <div class="upg-body">
+          <div class="upg-name">${cfg.name}</div>
+          <div class="upg-effect">${isMax ? '✅ Максимальный уровень' : next.fx}</div>
+          <div class="upg-dots">${dots}</div>
+        </div>
+        <div class="upg-right">
+          ${isMax
+            ? `<button class="btn-buy max">МАКС</button>`
+            : `<div class="upg-cost ${ok?'':'grey'}">${unit} ${fmt(next.cost)}</div>
+               <button class="btn-buy ${ok?'active':'disabled'}"
+                 onclick="buyUpg('${key}')" ${ok?'':'disabled'}>КУПИТЬ</button>`
+          }
+        </div>`;
+      list.appendChild(card);
+    }
   }
 }
 
@@ -1017,11 +1049,19 @@ function buyUpg(key) {
   const cfg  = CFG[key];
   if (lvl >= cfg.levels.length) return;
   const cost = cfg.levels[lvl].cost;
-  if (G.pts < cost) { toast('❌ Недостаточно очков','err'); return; }
-  G.pts -= cost;
+  const isSat = cfg.currency === 'sat';
+  const bal   = isSat ? G.sat : G.pts;
+  const unit  = isSat ? 'SATANDER' : 'очков';
+
+  if (bal < cost) {
+    toast(`❌ Недостаточно ${unit}!`, 'err');
+    return;
+  }
+  if (isSat) G.sat -= cost;
+  else G.pts -= cost;
   G[key+'_lvl']++;
   save();
-  toast('✅ Улучшение куплено!','ok');
+  toast('✅ Улучшение куплено!', 'ok');
   renderUpgrades();
   updateUI();
 }
@@ -1043,6 +1083,7 @@ function doExchange() {
   if (amt > avail) { toast('❌ Недостаточно очков','err'); return; }
 
   G.pts -= amt * RATE;
+  G.sat += amt;
   G.tokensGot += amt;
   save();
 
@@ -1069,6 +1110,7 @@ function updateUI() {
 
   // balance
   document.getElementById('balAmount').textContent = fmt(pts);
+  document.getElementById('balSat').textContent = fmt(G.sat||0);
 
   // energy
   document.getElementById('eFill').style.width = (e/me*100).toFixed(1)+'%';
@@ -1083,7 +1125,7 @@ function updateUI() {
     document.getElementById('eTimerText').textContent = '🔋 Энергия полная';
     document.getElementById('eTimerFill').style.width = '100%';
   } else {
-    // секунд на 1 единицу = 360 / REGEN_H
+    // секунд на 1 единицу = 3600 / REGEN_H
     const secsPerUnit = Math.round(3600 / REGEN_H);
     const now2 = Date.now();
     const secsSinceRegen = ((now2 - G.eTs) / 1000) % secsPerUnit;
@@ -1103,7 +1145,7 @@ function updateUI() {
   // profile
   document.getElementById('pBal').textContent    = fmt(pts);
   document.getElementById('pTotal').textContent  = fmt(G.total);
-  document.getElementById('pTokens').textContent = G.tokensGot||0;
+  document.getElementById('pTokens').textContent = fmt(G.sat||0);
   document.getElementById('pRefs').textContent   = G.refs||0;
 }
 
@@ -1157,7 +1199,7 @@ function init() {
     }
     const uid = tg.initDataUnsafe?.user?.id || '0';
     // ⚠️ Замени YOUR_BOT_USERNAME на username своего бота!
-    document.getElementById('refLink').textContent = `https://t.me/@Satander_gamesbot?start=ref${uid}`;
+    document.getElementById('refLink').textContent = `https://t.me/YOUR_BOT_USERNAME?start=ref${uid}`;
   } else {
     document.getElementById('refLink').textContent = 'Открой в Telegram для реферальной ссылки';
   }
