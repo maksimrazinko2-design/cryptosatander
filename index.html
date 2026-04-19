@@ -781,7 +781,12 @@ body {
             <button class="btn-max" onclick="setMax()">МАКС</button>
           </div>
         </div>
-        <button class="btn-exchange" onclick="doExchange()">⚡ Обменять</button>
+        <button class="btn-exchange" disabled style="background:linear-gradient(135deg,#4a3080,#3a2060);cursor:not-allowed;opacity:0.8;box-shadow:none;">
+          🔧 В разработке — скоро!
+        </button>
+        <div style="text-align:center;margin-top:10px;font-size:12px;color:var(--text3);line-height:1.5;">
+          Интеграция с DecimalChain появится в следующем обновлении.<br>Копи очки — они никуда не денутся! 🪐
+        </div>
       </div>
     </div>
 
@@ -1203,12 +1208,47 @@ function toast(msg, type='') {
 // ═══════════════════════════════════════
 function copyRef() {
   const link = document.getElementById('refLink').textContent;
-  navigator.clipboard?.writeText(link).then(() => toast('📋 Ссылка скопирована!','ok'));
+  navigator.clipboard?.writeText(link)
+    .then(() => toast('📋 Ссылка скопирована!','ok'))
+    .catch(() => {
+      // fallback для мобильных
+      const el = document.createElement('textarea');
+      el.value = link;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      toast('📋 Ссылка скопирована!','ok');
+    });
+}
+
+// Проверка реферала при старте
+function checkRefBonus() {
+  const tg = window.Telegram?.WebApp;
+  if (!tg) return;
+  const startParam = tg.initDataUnsafe?.start_param || '';
+  if (startParam.startsWith('ref')) {
+    const refId = startParam.replace('ref','');
+    const myId  = tg.initDataUnsafe?.user?.id?.toString() || '';
+    // Не начисляем самому себе
+    if (refId && refId !== myId) {
+      const key = 'ref_bonus_' + refId;
+      if (!localStorage.getItem(key)) {
+        // Сообщаем боту о реферале
+        tg.sendData(JSON.stringify({action:'referral', referrer: refId}));
+        localStorage.setItem(key, '1');
+      }
+    }
+  }
 }
 
 // ═══════════════════════════════════════
 // TELEGRAM INIT
 // ═══════════════════════════════════════
+
+// ⚠️ ЗАМЕНИ на username своего бота:
+const BOT_USERNAME = 'EternalSatanderBot';
+
 function init() {
   const tg = window.Telegram?.WebApp;
   if (tg) {
@@ -1221,13 +1261,17 @@ function init() {
       const n = u.first_name || 'Игрок';
       document.getElementById('uName').textContent = n;
       document.getElementById('pName').textContent = n;
-      document.getElementById('pId').textContent   = 'ID: '+u.id;
+      document.getElementById('pId').textContent   = 'ID: ' + u.id;
+      document.getElementById('refLink').textContent =
+        `https://t.me/${BOT_USERNAME}?start=ref${u.id}`;
+    } else {
+      document.getElementById('refLink').textContent =
+        `https://t.me/${BOT_USERNAME}?start=ref0`;
     }
-    const uid = tg.initDataUnsafe?.user?.id || '0';
-    // ⚠️ Замени YOUR_BOT_USERNAME на username своего бота!
-    document.getElementById('refLink').textContent = `https://t.me/Satander_gamesbot?start=ref${uid}`;
+    checkRefBonus();
   } else {
-    document.getElementById('refLink').textContent = 'Открой в Telegram для реферальной ссылки';
+    document.getElementById('refLink').textContent =
+      'Открой в Telegram для реферальной ссылки';
   }
 
   updateUI();
