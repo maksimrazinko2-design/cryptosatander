@@ -10,658 +10,246 @@
 * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; user-select:none; }
 
 :root {
-  --bg:        #1c1033;
-  --bg2:       #241540;
-  --bg3:       #2d1d52;
-  --bg4:       #362560;
-  --purple:    #8b5cf6;
-  --purple2:   #a78bfa;
-  --purple3:   #c4b5fd;
-  --blue:      #3b82f6;
-  --blue2:     #60a5fa;
-  --blue3:     #93c5fd;
-  --gold:      #fbbf24;
-  --gold2:     #fde68a;
-  --green:     #34d399;
-  --red:       #f87171;
-  --text:      #ffffff;
-  --text2:     #c4b5fd;
-  --text3:     #7c6fa0;
-  --border:    rgba(139,92,246,0.3);
-  --border-b:  rgba(59,130,246,0.35);
+  --bg:      #1c1033;
+  --bg2:     #241540;
+  --bg3:     #2d1d52;
+  --bg4:     #362560;
+  --purple:  #8b5cf6;
+  --purple2: #a78bfa;
+  --purple3: #c4b5fd;
+  --blue:    #3b82f6;
+  --blue2:   #60a5fa;
+  --blue3:   #93c5fd;
+  --gold:    #fbbf24;
+  --green:   #34d399;
+  --red:     #f87171;
+  --text:    #ffffff;
+  --text2:   #c4b5fd;
+  --text3:   #7c6fa0;
+  --border:  rgba(139,92,246,0.3);
+  --border-b:rgba(59,130,246,0.35);
 }
 
-html, body { height: 100%; overflow: hidden; }
+html, body { height:100%; overflow:hidden; }
 
 body {
-  font-family: 'Nunito', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  display: flex;
-  flex-direction: column;
+  font-family:'Nunito', sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  display:flex;
+  flex-direction:column;
 }
 
-/* Фон */
 .bg-glow {
-  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  position:fixed; inset:0; pointer-events:none; z-index:0;
   background:
     radial-gradient(ellipse 70% 40% at 50% 0%, rgba(139,92,246,0.25) 0%, transparent 70%),
     radial-gradient(ellipse 50% 30% at 10% 80%, rgba(59,130,246,0.12) 0%, transparent 60%),
     radial-gradient(ellipse 40% 25% at 90% 60%, rgba(139,92,246,0.1) 0%, transparent 60%);
 }
 
-.app { position: relative; z-index: 1; height: 100%; display: flex; flex-direction: column; max-width: 480px; margin: 0 auto; width: 100%; }
+.app {
+  position:relative; z-index:1;
+  height:100%; display:flex; flex-direction:column;
+  max-width:480px; margin:0 auto; width:100%;
+}
 
-/* ══════════════════════════════
-   HEADER
-══════════════════════════════ */
+/* ── HEADER ── */
 .header {
-  flex-shrink: 0;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 16px;
-  background: rgba(28,16,51,0.9);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
+  flex-shrink:0;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 16px;
+  background:rgba(28,16,51,0.9);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
 }
-
-.logo {
-  font-family: 'Space Mono', monospace;
-  font-size: 19px; font-weight: 700;
-  letter-spacing: 2px;
-  color: var(--text);
-}
-.logo b { color: var(--blue2); }
-
-.user-info { display: flex; align-items: center; gap: 8px; }
+.logo { font-family:'Space Mono',monospace; font-size:19px; font-weight:700; letter-spacing:2px; }
+.logo b { color:var(--blue2); }
+.user-info { display:flex; align-items:center; gap:8px; }
 .user-avatar {
-  width: 34px; height: 34px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--purple), var(--blue));
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px;
-  box-shadow: 0 0 12px rgba(139,92,246,0.5);
+  width:34px; height:34px; border-radius:50%;
+  background:linear-gradient(135deg,var(--purple),var(--blue));
+  display:flex; align-items:center; justify-content:center;
+  font-size:16px; box-shadow:0 0 12px rgba(139,92,246,0.5);
 }
-.user-name { font-size: 14px; font-weight: 700; color: var(--text2); }
+.user-name { font-size:14px; font-weight:700; color:var(--text2); }
 
-/* ══════════════════════════════
-   BALANCE BAR
-══════════════════════════════ */
+/* ── BALANCE BAR ── */
 .balance-bar {
-  flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  padding: 12px 16px;
-  background: var(--bg2);
-  border-bottom: 1px solid var(--border);
+  flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  gap:12px; padding:14px 16px;
+  background:var(--bg2);
+  border-bottom:1px solid var(--border);
+  position:relative;
 }
-
-.balance-half {
-  flex: 1;
-  display: flex; align-items: center; justify-content: center;
-  gap: 8px;
-}
-
-.balance-divider {
-  width: 1px; height: 36px;
-  background: rgba(139,92,246,0.3);
-  flex-shrink: 0;
-  margin: 0 8px;
-}
-
-.balance-coin { font-size: 26px; filter: drop-shadow(0 0 8px rgba(251,191,36,0.8)); flex-shrink: 0; }
-.balance-coin.sat { filter: drop-shadow(0 0 8px rgba(139,92,246,0.8)); }
-
-.balance-info { text-align: left; }
+.balance-coin { font-size:28px; filter:drop-shadow(0 0 8px rgba(251,191,36,0.8)); }
+.balance-info { text-align:center; }
 .balance-amount {
-  font-family: 'Space Mono', monospace;
-  font-size: 22px; font-weight: 700;
-  color: var(--text);
-  line-height: 1;
+  font-family:'Space Mono',monospace;
+  font-size:28px; font-weight:700; line-height:1;
 }
-.balance-label { font-size: 10px; color: var(--text3); letter-spacing: 1px; margin-top: 2px; }
-
+.balance-label { font-size:10px; color:var(--text3); letter-spacing:1px; margin-top:2px; }
 .balance-change {
-  position: absolute;
-  right: 16px;
-  font-size: 13px; font-weight: 800;
-  color: var(--green);
-  opacity: 0;
-  transition: opacity 0.3s;
+  position:absolute; right:16px;
+  font-size:13px; font-weight:800; color:var(--green);
+  opacity:0; transition:opacity 0.3s;
 }
-.balance-change.show { opacity: 1; }
+.balance-change.show { opacity:1; }
 
-/* ══════════════════════════════
-   SCREENS
-══════════════════════════════ */
-.screens {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-}
+/* ── SCREENS ── */
+.screens { flex:1; overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; }
+.screens::-webkit-scrollbar { display:none; }
+.screen { display:none; padding:16px; }
+.screen.active { display:flex; flex-direction:column; }
+#s-tap { padding:12px 16px; }
 
-.screens::-webkit-scrollbar { display: none; }
-
-.screen { display: none; padding: 16px; }
-.screen.active { display: flex; flex-direction: column; }
-#s-tap { padding: 12px 16px; }
-
-/* ══════════════════════════════
-   TAP SCREEN
-══════════════════════════════ */
-
-/* Энергия */
+/* ── ENERGY ── */
 .energy-row {
-  display: flex; align-items: stretch;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 20px;
-  background: var(--bg2);
-  border-radius: 16px;
-  border: 1px solid var(--border);
-  padding: 10px 14px;
+  display:flex; flex-direction:column; gap:8px;
+  margin-bottom:20px;
+  background:var(--bg2); border-radius:16px;
+  border:1px solid var(--border); padding:10px 14px;
 }
-
-.energy-track {
-  flex: 1; height: 10px;
-  background: rgba(255,255,255,0.08);
-  border-radius: 5px; overflow: hidden;
-}
-
+.energy-top { display:flex; align-items:center; gap:10px; }
+.energy-bolt { font-size:18px; }
+.energy-track { flex:1; height:10px; background:rgba(255,255,255,0.08); border-radius:5px; overflow:hidden; }
 .energy-fill {
-  height: 100%;
-  border-radius: 5px;
-  background: linear-gradient(90deg, var(--blue), var(--purple2));
-  transition: width 0.4s ease;
-  box-shadow: 0 0 8px rgba(59,130,246,0.7);
+  height:100%; border-radius:5px;
+  background:linear-gradient(90deg,var(--blue),var(--purple2));
+  transition:width 0.4s ease;
+  box-shadow:0 0 8px rgba(59,130,246,0.7);
 }
+.energy-label { font-family:'Space Mono',monospace; font-size:12px; color:var(--text2); white-space:nowrap; }
+.energy-timer { display:flex; align-items:center; gap:8px; padding:0 2px; }
+.energy-timer-icon { font-size:12px; }
+.energy-timer-text { font-family:'Space Mono',monospace; font-size:11px; color:var(--blue2); white-space:nowrap; min-width:110px; }
+.energy-timer-track { flex:1; height:4px; background:rgba(255,255,255,0.07); border-radius:2px; overflow:hidden; }
+.energy-timer-fill { height:100%; border-radius:2px; background:linear-gradient(90deg,var(--blue2),var(--purple2)); transition:width 0.9s linear; }
 
-.energy-label {
-  font-family: 'Space Mono', monospace;
-  font-size: 12px; color: var(--text2);
-  white-space: nowrap;
-}
-
-.energy-bolt { font-size: 18px; }
-
-.energy-top {
-  display: flex; align-items: center; gap: 10px;
-}
-
-.energy-timer {
-  display: flex; align-items: center; gap: 8px;
-  padding: 0 2px;
-}
-
-.energy-timer-icon { font-size: 12px; }
-
-.energy-timer-text {
-  font-family: 'Space Mono', monospace;
-  font-size: 11px; color: var(--blue2);
-  white-space: nowrap;
-  min-width: 110px;
-}
-
-.energy-timer-track {
-  flex: 1; height: 4px;
-  background: rgba(255,255,255,0.07);
-  border-radius: 2px; overflow: hidden;
-}
-
-.energy-timer-fill {
-  height: 100%;
-  border-radius: 2px;
-  background: linear-gradient(90deg, var(--blue2), var(--purple2));
-  transition: width 0.9s linear;
-}
-
-/* Центральная зона тапа */
+/* ── TAP ZONE ── */
 .tap-zone {
-  display: flex; flex-direction: column; align-items: center;
-  justify-content: center;
-  flex: 1;
-  padding-bottom: 16px;
+  display:flex; flex-direction:column; align-items:center;
+  justify-content:center; flex:1; padding-bottom:16px;
 }
-
-.tap-ring-outer {
-  position: relative;
-  width: 236px; height: 236px; /* золотое сечение от ширины экрана ~382px */
-  margin: 0 auto 24px;
-}
-
-/* Вращающееся кольцо */
+.tap-ring-outer { position:relative; width:236px; height:236px; margin:0 auto 24px; }
 .tap-ring-outer::before {
-  content: '';
-  position: absolute; inset: 0;
-  border-radius: 50%;
-  padding: 3px;
-  background: conic-gradient(
-    var(--blue) 0%,
-    var(--purple) 25%,
-    var(--blue2) 50%,
-    var(--purple2) 75%,
-    var(--blue) 100%
-  );
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  animation: spin 5s linear infinite;
-  opacity: 0.8;
+  content:''; position:absolute; inset:0; border-radius:50%; padding:3px;
+  background:conic-gradient(var(--blue) 0%,var(--purple) 25%,var(--blue2) 50%,var(--purple2) 75%,var(--blue) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor; mask-composite:exclude;
+  animation:spin 5s linear infinite; opacity:0.8;
 }
-
-@keyframes spin { to { transform: rotate(360deg); } }
-
+@keyframes spin { to { transform:rotate(360deg); } }
 .tap-ring-inner {
-  position: absolute;
-  inset: 10px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 38% 35%, var(--bg3), var(--bg));
-  border: 1px solid rgba(139,92,246,0.3);
-  display: flex; align-items: center; justify-content: center;
-  flex-direction: column;
-  cursor: pointer;
-  transition: transform 0.09s ease, box-shadow 0.09s ease;
-  box-shadow:
-    0 0 30px rgba(139,92,246,0.3),
-    inset 0 -6px 20px rgba(0,0,0,0.4),
-    inset 0 4px 10px rgba(139,92,246,0.15);
-  -webkit-tap-highlight-color: transparent;
+  position:absolute; inset:10px; border-radius:50%;
+  background:radial-gradient(circle at 38% 35%,var(--bg3),var(--bg));
+  border:1px solid rgba(139,92,246,0.3);
+  display:flex; align-items:center; justify-content:center; flex-direction:column;
+  cursor:pointer; transition:transform 0.09s ease, box-shadow 0.09s ease;
+  box-shadow:0 0 30px rgba(139,92,246,0.3), inset 0 -6px 20px rgba(0,0,0,0.4), inset 0 4px 10px rgba(139,92,246,0.15);
+  -webkit-tap-highlight-color:transparent;
 }
-
-.tap-ring-inner:active,
-.tap-ring-inner.pressed {
-  transform: scale(0.91);
-  box-shadow:
-    0 0 60px rgba(59,130,246,0.6),
-    inset 0 6px 20px rgba(0,0,0,0.5);
+.tap-ring-inner:active, .tap-ring-inner.pressed {
+  transform:scale(0.91);
+  box-shadow:0 0 60px rgba(59,130,246,0.6), inset 0 6px 20px rgba(0,0,0,0.5);
 }
+.tap-emoji { font-size:60px; line-height:1; pointer-events:none; filter:drop-shadow(0 0 12px rgba(251,191,36,0.6)); }
+.tap-hint { font-size:11px; font-weight:800; letter-spacing:3px; color:var(--purple3); margin-top:6px; pointer-events:none; }
 
-.tap-emoji { font-size: 60px; line-height: 1; pointer-events: none; filter: drop-shadow(0 0 12px rgba(251,191,36,0.6)); }
-.tap-hint { font-size: 11px; font-weight: 800; letter-spacing: 3px; color: var(--purple3); margin-top: 6px; pointer-events: none; }
-
-/* Плюшки под кнопкой */
+/* ── CHIPS ── */
 .tap-chips {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 8px;
-  width: 100%;
-  max-width: 340px;
+  display:grid; grid-template-columns:1fr 1fr 1fr;
+  gap:8px; width:100%; max-width:340px;
 }
-
 .tap-chip {
-  display: flex; align-items: center; justify-content: center; gap: 5px;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 8px 6px;
-  font-size: 12px; font-weight: 700;
-  text-align: center;
+  display:flex; align-items:center; justify-content:center; gap:5px;
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:14px; padding:8px 6px;
+  font-size:12px; font-weight:700; text-align:center;
 }
+.tap-chip .chip-icon { font-size:14px; }
+.tap-chip .chip-val { color:var(--blue2); font-family:'Space Mono',monospace; font-size:12px; }
+.tap-chip .chip-lbl { color:var(--text3); font-size:10px; }
 
-.tap-chip .chip-icon { font-size: 14px; }
-.tap-chip .chip-val { color: var(--blue2); font-family: 'Space Mono', monospace; font-size: 12px; }
-.tap-chip .chip-lbl { color: var(--text3); font-size: 10px; }
-
-/* Плавающие очки */
+/* ── FLOAT ── */
 .float-pts {
-  position: fixed;
-  font-family: 'Space Mono', monospace;
-  font-size: 20px; font-weight: 700;
-  color: var(--gold);
-  text-shadow: 0 0 12px rgba(251,191,36,0.7);
-  pointer-events: none;
-  z-index: 999;
-  animation: floatUp 0.9s ease-out forwards;
+  position:fixed; font-family:'Space Mono',monospace;
+  font-size:20px; font-weight:700; color:var(--gold);
+  text-shadow:0 0 12px rgba(251,191,36,0.7);
+  pointer-events:none; z-index:999;
+  animation:floatUp 0.9s ease-out forwards;
 }
-
 @keyframes floatUp {
-  0%   { opacity: 1; transform: translateY(0) scale(1); }
-  80%  { opacity: 1; }
-  100% { opacity: 0; transform: translateY(-90px) scale(1.2); }
+  0%   { opacity:1; transform:translateY(0) scale(1); }
+  80%  { opacity:1; }
+  100% { opacity:0; transform:translateY(-90px) scale(1.2); }
 }
 
-/* ══════════════════════════════
-   UPGRADES SCREEN
-══════════════════════════════ */
+/* ── UPGRADES ── */
 .screen-title {
-  font-size: 11px; font-weight: 800;
-  letter-spacing: 2px; text-transform: uppercase;
-  color: var(--text3);
-  margin-bottom: 14px;
+  font-size:11px; font-weight:800; letter-spacing:2px;
+  text-transform:uppercase; color:var(--text3); margin-bottom:14px;
 }
-
 .upgrade-card {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 14px 16px;
-  margin-bottom: 10px;
-  display: flex; align-items: center; gap: 14px;
-  transition: border-color 0.2s, background 0.2s;
-  position: relative;
-  overflow: hidden;
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:18px; padding:14px 16px; margin-bottom:10px;
+  display:flex; align-items:center; gap:14px;
+  transition:border-color 0.2s, background 0.2s;
 }
+.upgrade-card.can-buy { border-color:rgba(59,130,246,0.5); background:linear-gradient(135deg,rgba(59,130,246,0.06),var(--bg2)); }
+.upgrade-card.maxed   { border-color:rgba(52,211,153,0.3);  background:linear-gradient(135deg,rgba(52,211,153,0.04),var(--bg2)); }
+.upg-icon { width:52px; height:52px; border-radius:14px; flex-shrink:0; background:linear-gradient(135deg,var(--bg3),var(--bg4)); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:26px; }
+.upg-body { flex:1; min-width:0; }
+.upg-name { font-size:16px; font-weight:800; margin-bottom:2px; }
+.upg-effect { font-size:12px; color:var(--blue3); margin-bottom:8px; font-weight:600; }
+.upg-dots { display:flex; gap:4px; }
+.dot { width:10px; height:10px; border-radius:50%; background:rgba(255,255,255,0.1); transition:background 0.2s; }
+.dot.on { background:linear-gradient(135deg,var(--blue),var(--purple2)); box-shadow:0 0 5px var(--blue); }
+.upg-right { flex-shrink:0; text-align:right; }
+.upg-cost { font-family:'Space Mono',monospace; font-size:14px; font-weight:700; color:var(--gold); margin-bottom:6px; }
+.upg-cost.grey { color:var(--text3); }
+.btn-buy { padding:8px 18px; border-radius:10px; border:none; font-family:'Nunito',sans-serif; font-size:13px; font-weight:800; cursor:pointer; transition:all 0.15s; }
+.btn-buy.active  { background:linear-gradient(135deg,var(--blue),var(--purple)); color:white; box-shadow:0 4px 16px rgba(59,130,246,0.4); }
+.btn-buy.active:active { transform:scale(0.95); }
+.btn-buy.disabled { background:var(--bg4); color:var(--text3); cursor:not-allowed; }
+.btn-buy.max { background:rgba(52,211,153,0.15); color:var(--green); cursor:default; border:1px solid rgba(52,211,153,0.3); }
 
-.upgrade-card.can-buy {
-  border-color: rgba(59,130,246,0.5);
-  background: linear-gradient(135deg, rgba(59,130,246,0.06), var(--bg2));
-}
+/* ── PROFILE ── */
+.profile-top { text-align:center; background:var(--bg2); border:1px solid var(--border); border-radius:22px; padding:24px 16px 20px; margin-bottom:14px; }
+.profile-ava { width:76px; height:76px; border-radius:50%; background:linear-gradient(135deg,var(--blue),var(--purple)); display:flex; align-items:center; justify-content:center; font-size:36px; margin:0 auto 12px; box-shadow:0 0 24px rgba(59,130,246,0.5),0 0 48px rgba(139,92,246,0.3); }
+.profile-name { font-size:20px; font-weight:900; margin-bottom:4px; }
+.profile-sub  { font-size:12px; color:var(--text3); letter-spacing:1px; }
+.stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+.stat-box { background:var(--bg2); border:1px solid var(--border); border-radius:16px; padding:14px; }
+.stat-box-icon { font-size:20px; margin-bottom:6px; }
+.stat-box-val  { font-family:'Space Mono',monospace; font-size:18px; font-weight:700; margin-bottom:2px; }
+.stat-box-lbl  { font-size:11px; color:var(--text3); font-weight:700; letter-spacing:0.5px; }
+.ref-box { background:var(--bg2); border:1px solid var(--border-b); border-radius:20px; padding:18px; }
+.ref-box-title { font-size:15px; font-weight:800; color:var(--blue2); margin-bottom:6px; }
+.ref-box-desc  { font-size:13px; color:var(--text2); font-weight:600; line-height:1.5; margin-bottom:14px; }
+.ref-box-desc b { color:var(--gold); }
+.ref-link-box { background:var(--bg3); border:1px solid var(--border); border-radius:12px; padding:10px 14px; font-family:'Space Mono',monospace; font-size:11px; color:var(--purple3); word-break:break-all; margin-bottom:10px; line-height:1.4; }
+.btn-copy { width:100%; padding:13px; background:rgba(139,92,246,0.15); border:1px solid var(--border); border-radius:14px; color:var(--purple3); font-family:'Nunito',sans-serif; font-size:14px; font-weight:800; cursor:pointer; letter-spacing:0.5px; transition:background 0.15s; }
+.btn-copy:active { background:rgba(139,92,246,0.3); }
 
-.upgrade-card.maxed {
-  border-color: rgba(52,211,153,0.3);
-  background: linear-gradient(135deg, rgba(52,211,153,0.04), var(--bg2));
-}
+/* ── NAV ── */
+.nav { flex-shrink:0; display:flex; background:rgba(24,14,46,0.97); backdrop-filter:blur(20px); border-top:1px solid var(--border); }
+.nav-item { flex:1; padding:10px 4px 13px; display:flex; flex-direction:column; align-items:center; gap:3px; cursor:pointer; border:none; background:transparent; color:var(--text3); transition:color 0.2s; position:relative; }
+.nav-item.active { color:var(--text); }
+.nav-item.active::after { content:''; position:absolute; bottom:0; left:25%; right:25%; height:2px; background:linear-gradient(90deg,var(--blue),var(--purple2)); border-radius:2px 2px 0 0; }
+.nav-icon { font-size:22px; line-height:1; }
+.nav-lbl  { font-size:10px; font-weight:800; letter-spacing:0.5px; }
 
-.upg-icon {
-  width: 52px; height: 52px; border-radius: 14px; flex-shrink: 0;
-  background: linear-gradient(135deg, var(--bg3), var(--bg4));
-  border: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 26px;
-}
-
-.upg-body { flex: 1; min-width: 0; }
-.upg-name { font-size: 16px; font-weight: 800; margin-bottom: 2px; }
-.upg-effect { font-size: 12px; color: var(--blue3); margin-bottom: 8px; font-weight: 600; }
-
-.upg-dots { display: flex; gap: 4px; }
-.dot {
-  width: 10px; height: 10px; border-radius: 50%;
-  background: rgba(255,255,255,0.1);
-  transition: background 0.2s;
-}
-.dot.on { background: linear-gradient(135deg, var(--blue), var(--purple2)); box-shadow: 0 0 5px var(--blue); }
-
-.upg-right { flex-shrink: 0; text-align: right; }
-
-.upg-cost {
-  font-family: 'Space Mono', monospace;
-  font-size: 14px; font-weight: 700;
-  color: var(--gold); margin-bottom: 6px;
-}
-
-.upg-cost.grey { color: var(--text3); }
-
-.btn-buy {
-  padding: 8px 18px;
-  border-radius: 10px; border: none;
-  font-family: 'Nunito', sans-serif;
-  font-size: 13px; font-weight: 800;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.btn-buy.active {
-  background: linear-gradient(135deg, var(--blue), var(--purple));
-  color: white;
-  box-shadow: 0 4px 16px rgba(59,130,246,0.4);
-}
-
-.btn-buy.active:active { transform: scale(0.95); }
-.btn-buy.disabled { background: var(--bg4); color: var(--text3); cursor: not-allowed; }
-.btn-buy.max { background: rgba(52,211,153,0.15); color: var(--green); cursor: default; border: 1px solid rgba(52,211,153,0.3); }
-
-/* ══════════════════════════════
-   EXCHANGE SCREEN
-══════════════════════════════ */
-.exch-card {
-  background: var(--bg2);
-  border: 1px solid var(--border-b);
-  border-radius: 22px;
-  padding: 22px 18px;
-  margin-bottom: 14px;
-}
-
-.exch-rate-row {
-  display: flex; align-items: center; justify-content: center;
-  gap: 14px; margin-bottom: 18px;
-}
-
-.exch-side {
-  text-align: center; flex: 1;
-}
-
-.exch-big {
-  font-family: 'Space Mono', monospace;
-  font-size: 22px; font-weight: 700;
-  color: var(--text);
-}
-
-.exch-small { font-size: 11px; color: var(--text3); margin-top: 2px; letter-spacing: 1px; }
-
-.exch-arrow {
-  font-size: 22px; color: var(--blue2);
-  animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
-
-.exch-avail {
-  text-align: center;
-  font-size: 13px; color: var(--text2);
-  font-weight: 600;
-  padding: 10px;
-  background: rgba(59,130,246,0.08);
-  border-radius: 12px;
-  border: 1px solid var(--border-b);
-}
-
-.exch-avail span { color: var(--gold); font-family: 'Space Mono', monospace; }
-
-.form-group { margin-bottom: 14px; }
-
-.form-lbl {
-  font-size: 11px; font-weight: 800; letter-spacing: 1px;
-  text-transform: uppercase; color: var(--text3);
-  margin-bottom: 8px; display: block;
-}
-
-.form-input {
-  width: 100%;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 13px 16px;
-  color: var(--text);
-  font-family: 'Nunito', sans-serif;
-  font-size: 15px; font-weight: 600;
-  outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.form-input:focus {
-  border-color: var(--blue);
-  box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
-}
-
-.form-input::placeholder { color: var(--text3); font-weight: 600; }
-
-.input-row { display: flex; gap: 8px; }
-.input-row .form-input { flex: 1; }
-
-.btn-max {
-  padding: 13px 16px;
-  background: rgba(59,130,246,0.15);
-  border: 1px solid var(--border-b);
-  border-radius: 14px;
-  color: var(--blue2); font-family: 'Nunito', sans-serif;
-  font-size: 13px; font-weight: 800;
-  cursor: pointer; white-space: nowrap;
-  transition: background 0.15s;
-}
-
-.btn-max:active { background: rgba(59,130,246,0.3); }
-
-.btn-exchange {
-  width: 100%;
-  padding: 16px;
-  background: linear-gradient(135deg, var(--blue), var(--purple));
-  border: none; border-radius: 16px;
-  color: white;
-  font-family: 'Nunito', sans-serif;
-  font-size: 16px; font-weight: 900;
-  letter-spacing: 1px;
-  cursor: pointer;
-  box-shadow: 0 6px 24px rgba(59,130,246,0.4);
-  transition: all 0.15s;
-  margin-top: 4px;
-}
-
-.btn-exchange:active { transform: scale(0.97); box-shadow: 0 2px 10px rgba(59,130,246,0.3); }
-.btn-exchange:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
-
-/* ══════════════════════════════
-   PROFILE SCREEN
-══════════════════════════════ */
-.profile-top {
-  text-align: center;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 22px;
-  padding: 24px 16px 20px;
-  margin-bottom: 14px;
-}
-
-.profile-ava {
-  width: 76px; height: 76px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--blue), var(--purple));
-  display: flex; align-items: center; justify-content: center;
-  font-size: 36px;
-  margin: 0 auto 12px;
-  box-shadow: 0 0 24px rgba(59,130,246,0.5), 0 0 48px rgba(139,92,246,0.3);
-}
-
-.profile-name { font-size: 20px; font-weight: 900; margin-bottom: 4px; }
-.profile-sub { font-size: 12px; color: var(--text3); letter-spacing: 1px; }
-
-.stats-grid {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 10px; margin-bottom: 14px;
-}
-
-.stat-box {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 14px;
-}
-
-.stat-box-icon { font-size: 20px; margin-bottom: 6px; }
-.stat-box-val {
-  font-family: 'Space Mono', monospace;
-  font-size: 18px; font-weight: 700;
-  color: var(--text); margin-bottom: 2px;
-}
-
-.stat-box-lbl { font-size: 11px; color: var(--text3); font-weight: 700; letter-spacing: 0.5px; }
-
-.ref-box {
-  background: var(--bg2);
-  border: 1px solid var(--border-b);
-  border-radius: 20px;
-  padding: 18px;
-}
-
-.ref-box-title {
-  font-size: 15px; font-weight: 800;
-  color: var(--blue2); margin-bottom: 6px;
-}
-
-.ref-box-desc {
-  font-size: 13px; color: var(--text2); font-weight: 600;
-  line-height: 1.5; margin-bottom: 14px;
-}
-
-.ref-box-desc b { color: var(--gold); }
-
-.ref-link-box {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 10px 14px;
-  font-family: 'Space Mono', monospace;
-  font-size: 11px; color: var(--purple3);
-  word-break: break-all;
-  margin-bottom: 10px;
-  line-height: 1.4;
-}
-
-.btn-copy {
-  width: 100%;
-  padding: 13px;
-  background: rgba(139,92,246,0.15);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  color: var(--purple3);
-  font-family: 'Nunito', sans-serif;
-  font-size: 14px; font-weight: 800;
-  cursor: pointer; letter-spacing: 0.5px;
-  transition: background 0.15s;
-}
-
-.btn-copy:active { background: rgba(139,92,246,0.3); }
-
-/* ══════════════════════════════
-   BOTTOM NAV
-══════════════════════════════ */
-.nav {
-  flex-shrink: 0;
-  display: flex;
-  background: rgba(24,14,46,0.97);
-  backdrop-filter: blur(20px);
-  border-top: 1px solid var(--border);
-}
-
-.nav-item {
-  flex: 1;
-  padding: 10px 4px 13px;
-  display: flex; flex-direction: column; align-items: center; gap: 3px;
-  cursor: pointer;
-  border: none; background: transparent;
-  color: var(--text3);
-  transition: color 0.2s;
-  position: relative;
-}
-
-.nav-item.active { color: var(--text); }
-
-.nav-item.active::after {
-  content: '';
-  position: absolute; bottom: 0; left: 25%; right: 25%;
-  height: 2px;
-  background: linear-gradient(90deg, var(--blue), var(--purple2));
-  border-radius: 2px 2px 0 0;
-}
-
-.nav-icon { font-size: 22px; line-height: 1; }
-.nav-lbl { font-size: 10px; font-weight: 800; letter-spacing: 0.5px; }
-
-/* ══════════════════════════════
-   TOAST
-══════════════════════════════ */
-.toast {
-  position: fixed; bottom: 82px; left: 50%;
-  transform: translateX(-50%) translateY(16px);
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 11px 22px;
-  font-size: 14px; font-weight: 700;
-  color: var(--text);
-  opacity: 0;
-  transition: all 0.25s;
-  z-index: 200;
-  white-space: nowrap;
-  pointer-events: none;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-}
-
-.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-.toast.ok   { color: var(--green); border-color: rgba(52,211,153,0.4); }
-.toast.err  { color: var(--red);   border-color: rgba(248,113,113,0.4); }
+/* ── TOAST ── */
+.toast { position:fixed; bottom:82px; left:50%; transform:translateX(-50%) translateY(16px); background:var(--bg3); border:1px solid var(--border); border-radius:14px; padding:11px 22px; font-size:14px; font-weight:700; opacity:0; transition:all 0.25s; z-index:200; white-space:nowrap; pointer-events:none; box-shadow:0 8px 32px rgba(0,0,0,0.4); }
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+.toast.ok  { color:var(--green); border-color:rgba(52,211,153,0.4); }
+.toast.err { color:var(--red);   border-color:rgba(248,113,113,0.4); }
 </style>
 </head>
 <body>
 <div class="bg-glow"></div>
-
 <div class="app">
 
   <!-- HEADER -->
@@ -673,22 +261,12 @@ body {
     </div>
   </div>
 
-  <!-- BALANCE BAR -->
+  <!-- BALANCE -->
   <div class="balance-bar">
-    <div class="balance-half">
-      <div class="balance-coin">🪙</div>
-      <div class="balance-info">
-        <div class="balance-amount" id="balAmount">0</div>
-        <div class="balance-label">ОЧКОВ</div>
-      </div>
-    </div>
-    <div class="balance-divider"></div>
-    <div class="balance-half">
-      <div class="balance-coin sat">🪐</div>
-      <div class="balance-info">
-        <div class="balance-amount" id="balSat">0</div>
-        <div class="balance-label">SATANDER</div>
-      </div>
+    <div class="balance-coin">🪙</div>
+    <div class="balance-info">
+      <div class="balance-amount" id="balAmount">0</div>
+      <div class="balance-label">SATANDER POINTS</div>
     </div>
     <div class="balance-change" id="balChange">+0</div>
   </div>
@@ -696,9 +274,8 @@ body {
   <!-- SCREENS -->
   <div class="screens">
 
-    <!-- ── TAP ── -->
+    <!-- TAP -->
     <div class="screen active" id="s-tap">
-
       <div class="energy-row">
         <div class="energy-top">
           <span class="energy-bolt">⚡</span>
@@ -723,7 +300,6 @@ body {
             <div class="tap-hint">НАЖМИ</div>
           </div>
         </div>
-
         <div class="tap-chips">
           <div class="tap-chip">
             <span class="chip-icon">⚡</span>
@@ -744,22 +320,19 @@ body {
       </div>
     </div>
 
-    <!-- ── UPGRADES ── -->
+    <!-- UPGRADES -->
     <div class="screen" id="s-upgrades">
       <div class="screen-title">Улучшения</div>
       <div id="upgList"></div>
     </div>
 
-   
-
-    <!-- ── PROFILE ── -->
+    <!-- PROFILE -->
     <div class="screen" id="s-profile">
       <div class="profile-top">
         <div class="profile-ava">🪐</div>
         <div class="profile-name" id="pName">Игрок</div>
-        <div class="profile-sub" id="pId">ID: —</div>
+        <div class="profile-sub"  id="pId">ID: —</div>
       </div>
-
       <div class="stats-grid">
         <div class="stat-box">
           <div class="stat-box-icon">💰</div>
@@ -772,17 +345,16 @@ body {
           <div class="stat-box-lbl">Всего заработано</div>
         </div>
         <div class="stat-box">
-          <div class="stat-box-icon">🪐</div>
-          <div class="stat-box-val" id="pTokens">0</div>
-          <div class="stat-box-lbl">Токенов получено</div>
-        </div>
-        <div class="stat-box">
           <div class="stat-box-icon">👥</div>
           <div class="stat-box-val" id="pRefs">0</div>
           <div class="stat-box-lbl">Рефералов</div>
         </div>
+        <div class="stat-box">
+          <div class="stat-box-icon">🎁</div>
+          <div class="stat-box-val" id="pRefPts">0</div>
+          <div class="stat-box-lbl">Очков с рефералов</div>
+        </div>
       </div>
-
       <div class="ref-box">
         <div class="ref-box-title">👥 Приглашай друзей</div>
         <div class="ref-box-desc">Получай <b>50 очков</b> за каждого друга который зайдёт по твоей ссылке!</div>
@@ -793,7 +365,7 @@ body {
 
   </div><!-- /screens -->
 
-  <!-- BOTTOM NAV -->
+  <!-- NAV -->
   <div class="nav">
     <button class="nav-item active" onclick="goTab('tap',this)">
       <span class="nav-icon">👆</span>
@@ -803,7 +375,6 @@ body {
       <span class="nav-icon">⬆️</span>
       <span class="nav-lbl">АПГРЕЙДЫ</span>
     </button>
-    
     <button class="nav-item" onclick="goTab('profile',this)">
       <span class="nav-icon">👤</span>
       <span class="nav-lbl">ПРОФИЛЬ</span>
@@ -811,87 +382,76 @@ body {
   </div>
 
 </div><!-- /app -->
-
 <div class="toast" id="toast"></div>
 
 <script>
-// ═══════════════════════════════════════
-// КОНФИГ УЛУЧШЕНИЙ
-// ═══════════════════════════════════════
-// ═══════════════════════════════════════
-// КОНФИГ УЛУЧШЕНИЙ
-// pts = за очки, sat = за SATANDER
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
+// ⚠️ ЗАМЕНИ на username своего бота (без @)
+const BOT_USERNAME = 'EternalSatanderBot';
+const REF_BONUS    = 50;
+// ═══════════════════════════════════════════
+
+// ── КОНФИГ УЛУЧШЕНИЙ (все за очки) ──────────
 const CFG = {
   tap_power: {
     name:'Сила тапа', icon:'⚡',
-    currency:'pts',
     levels:[
-      {cost:250,   value:2, fx:'+1 очко/тап'},
-      {cost:405,   value:3, fx:'+2 очка/тап'},
-      {cost:655,   value:4, fx:'+3 очка/тап'},
-      {cost:1060,  value:6, fx:'+5 очков/тап'},
-      {cost:1715,  value:8, fx:'+7 очков/тап'},
+      {cost:250,  value:2,  fx:'+1 очко/тап'},
+      {cost:405,  value:3,  fx:'+2 очка/тап'},
+      {cost:655,  value:4,  fx:'+3 очка/тап'},
+      {cost:1060, value:6,  fx:'+5 очков/тап'},
+      {cost:1715, value:8,  fx:'+7 очков/тап'},
     ]
   },
   energy: {
     name:'Энергия', icon:'🔋',
-    currency:'pts',
     levels:[
-      {cost:300,   value:150,  fx:'150 энергии'},
-      {cost:485,   value:250,  fx:'250 энергии'},
-      {cost:785,   value:400,  fx:'400 энергии'},
-      {cost:1270,  value:600,  fx:'600 энергии'},
-      {cost:2055,  value:1000, fx:'1000 энергии'},
+      {cost:300,  value:150,  fx:'150 энергии'},
+      {cost:485,  value:250,  fx:'250 энергии'},
+      {cost:785,  value:400,  fx:'400 энергии'},
+      {cost:1270, value:600,  fx:'600 энергии'},
+      {cost:2055, value:1000, fx:'1000 энергии'},
     ]
   },
   autotap: {
     name:'Автотап', icon:'🤖',
-    currency:'sat',
     levels:[
-      {cost:1,  value:5,   fx:'5 очков/час'},
-      {cost:2,  value:10,  fx:'10 очков/час'},
-      {cost:3,  value:20,  fx:'20 очков/час'},
-      {cost:5,  value:40,  fx:'40 очков/час'},
-      {cost:8,  value:80,  fx:'80 очков/час'},
+      {cost:500,  value:5,  fx:'5 очков/час'},
+      {cost:810,  value:10, fx:'10 очков/час'},
+      {cost:1310, value:20, fx:'20 очков/час'},
+      {cost:2120, value:40, fx:'40 очков/час'},
+      {cost:3430, value:80, fx:'80 очков/час'},
     ]
   },
   multiplier: {
     name:'Множитель', icon:'✖️',
-    currency:'sat',
     levels:[
-      {cost:2,  value:1.5, fx:'×1.5 ко всем очкам'},
-      {cost:3,  value:2.0, fx:'×2.0 ко всем очкам'},
-      {cost:5,  value:2.5, fx:'×2.5 ко всем очкам'},
-      {cost:8,  value:3.0, fx:'×3.0 ко всем очкам'},
-      {cost:13, value:4.0, fx:'×4.0 ко всем очкам'},
+      {cost:600,  value:1.5, fx:'×1.5 ко всем очкам'},
+      {cost:970,  value:2.0, fx:'×2.0 ко всем очкам'},
+      {cost:1570, value:2.5, fx:'×2.5 ко всем очкам'},
+      {cost:2540, value:3.0, fx:'×3.0 ко всем очкам'},
+      {cost:4110, value:4.0, fx:'×4.0 ко всем очкам'},
     ]
   },
 };
 
-const RATE   = 1000; // 1000 очков = 1 SATANDER
-const BASE_E = 100;
-const REGEN_H = 100; // 1 энергия каждые 36 секунд
+const BASE_E  = 100;
+const REGEN_H = 100; // 1 единица каждые 36 секунд
 
-// ═══════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════
+// ── STATE ────────────────────────────────────
 function loadState() {
   const def = {
-    pts:0, total:0, sat:0, tokensGot:0, refs:0,
+    pts:0, total:0, refs:0, refPts:0,
     energy:BASE_E, eTs:Date.now(), autoTs:Date.now(),
     tap_power_lvl:0, autotap_lvl:0, multiplier_lvl:0, energy_lvl:0,
   };
-  try { return {...def, ...JSON.parse(localStorage.getItem('sat_v2')||'{}')}; }
+  try { return {...def, ...JSON.parse(localStorage.getItem('sat_v3')||'{}')}; }
   catch { return def; }
 }
-function save() { localStorage.setItem('sat_v2', JSON.stringify(G)); }
-
+function save() { localStorage.setItem('sat_v3', JSON.stringify(G)); }
 let G = loadState();
 
-// ═══════════════════════════════════════
-// ГЕТТЕРЫ
-// ═══════════════════════════════════════
+// ── ГЕТТЕРЫ ──────────────────────────────────
 const mult  = () => G.multiplier_lvl ? CFG.multiplier.levels[G.multiplier_lvl-1].value : 1;
 const tapPt = () => (G.tap_power_lvl ? CFG.tap_power.levels[G.tap_power_lvl-1].value : 1) * mult();
 const maxE  = () => G.energy_lvl ? CFG.energy.levels[G.energy_lvl-1].value : BASE_E;
@@ -899,73 +459,49 @@ const autoH = () => G.autotap_lvl ? Math.floor(CFG.autotap.levels[G.autotap_lvl-
 
 function fmt(n) {
   n = Math.floor(n);
-  if(n>=1e6) return (n/1e6).toFixed(2)+'M';
-  if(n>=1e3) return (n/1e3).toFixed(1)+'K';
+  if (n >= 1e6) return (n/1e6).toFixed(2)+'M';
+  if (n >= 1e3) return (n/1e3).toFixed(1)+'K';
   return ''+n;
 }
 
-// ═══════════════════════════════════════
-// РЕСТОР ЭНЕРГИИ + АВТОТАП
-// ═══════════════════════════════════════
+// ── ЭНЕРГИЯ + АВТОТАП ────────────────────────
 function tick() {
   const now = Date.now();
-  // энергия
-  const hrs = (now - G.eTs) / 3600000;
+  const hrs   = (now - G.eTs) / 3600000;
   const regen = Math.floor(hrs * REGEN_H);
-  if (regen > 0) {
-    G.energy = Math.min(G.energy + regen, maxE());
-    G.eTs = now;
-  }
-  // автотап
+  if (regen > 0) { G.energy = Math.min(G.energy + regen, maxE()); G.eTs = now; }
   const autoHrs = (now - G.autoTs) / 3600000;
   const earned  = autoHrs * autoH();
   if (earned >= 1) {
-    G.pts   += earned;
-    G.total += earned;
-    G.autoTs = now;
-    save();
-    return Math.floor(earned);
+    G.pts += earned; G.total += earned; G.autoTs = now;
+    save(); return Math.floor(earned);
   }
   return 0;
 }
 
-// ═══════════════════════════════════════
-// ТАП
-// ═══════════════════════════════════════
+// ── ТАП ──────────────────────────────────────
 let lastTap = 0;
-
 function onTap(e) {
   e.preventDefault();
   const now = Date.now();
-  if (now - lastTap < 80) return; // debounce
+  if (now - lastTap < 80) return;
   lastTap = now;
-
   tick();
   const e_ = Math.min(G.energy, maxE());
-  if (e_ < 1) { toast('🔋 Нет энергии! Восстанавливается...','err'); return; }
-
+  if (e_ < 1) { toast('🔋 Нет энергии! Восстанавливается...', 'err'); return; }
   const pts = tapPt();
-  G.pts    += pts;
-  G.total  += pts;
-  G.energy  = e_ - 1;
+  G.pts += pts; G.total += pts; G.energy = e_ - 1;
   save();
-
-  // анимация кнопки
   const btn = document.getElementById('tapBtn');
   btn.classList.add('pressed');
   setTimeout(() => btn.classList.remove('pressed'), 120);
-
-  // плюс очки
   const touch = e.touches ? e.touches[0] : e;
-  spawnFloat(touch.clientX||window.innerWidth/2, touch.clientY||200, '+'+fmt(pts));
-
-  // balance change flash
+  spawnFloat(touch.clientX || window.innerWidth/2, touch.clientY || 200, '+'+fmt(pts));
   const bc = document.getElementById('balChange');
   bc.textContent = '+'+fmt(pts);
   bc.classList.add('show');
   clearTimeout(bc._t);
   bc._t = setTimeout(() => bc.classList.remove('show'), 700);
-
   updateUI();
 }
 
@@ -979,76 +515,43 @@ function spawnFloat(x, y, txt) {
   setTimeout(() => el.remove(), 950);
 }
 
-// ═══════════════════════════════════════
-// АПГРЕЙДЫ
-// ═══════════════════════════════════════
+// ── АПГРЕЙДЫ ─────────────────────────────────
 function renderUpgrades() {
   const list = document.getElementById('upgList');
   list.innerHTML = '';
-
-  // Заголовки секций
-  const sections = {
-    pts: { label: '🪙 За очки', keys: ['tap_power','energy'] },
-    sat: { label: '🪐 За SATANDER', keys: ['autotap','multiplier'] },
-  };
-
-  for (const [sec, secData] of Object.entries(sections)) {
-    const secTitle = document.createElement('div');
-    secTitle.className = 'screen-title';
-    secTitle.style.marginTop = '16px';
-    secTitle.textContent = secData.label;
-    list.appendChild(secTitle);
-
-    for (const key of secData.keys) {
-      const cfg  = CFG[key];
-      const lvl  = G[key+'_lvl'];
-      const isMax = lvl >= cfg.levels.length;
-      const next  = isMax ? null : cfg.levels[lvl];
-      const bal   = cfg.currency === 'sat' ? G.sat : G.pts;
-      const ok    = next && bal >= next.cost;
-      const unit  = cfg.currency === 'sat' ? '🪐' : '🪙';
-
-      const card = document.createElement('div');
-      card.className = 'upgrade-card' + (isMax?' maxed':ok?' can-buy':'');
-
-      const dots = cfg.levels.map((_,i) =>
-        `<div class="dot ${i<lvl?'on':''}"></div>`).join('');
-
-      card.innerHTML = `
-        <div class="upg-icon">${cfg.icon}</div>
-        <div class="upg-body">
-          <div class="upg-name">${cfg.name}</div>
-          <div class="upg-effect">${isMax ? '✅ Максимальный уровень' : next.fx}</div>
-          <div class="upg-dots">${dots}</div>
-        </div>
-        <div class="upg-right">
-          ${isMax
-            ? `<button class="btn-buy max">МАКС</button>`
-            : `<div class="upg-cost ${ok?'':'grey'}">${unit} ${fmt(next.cost)}</div>
-               <button class="btn-buy ${ok?'active':'disabled'}"
-                 onclick="buyUpg('${key}')" ${ok?'':'disabled'}>КУПИТЬ</button>`
-          }
-        </div>`;
-      list.appendChild(card);
-    }
+  for (const [key, cfg] of Object.entries(CFG)) {
+    const lvl   = G[key+'_lvl'];
+    const isMax = lvl >= cfg.levels.length;
+    const next  = isMax ? null : cfg.levels[lvl];
+    const ok    = next && G.pts >= next.cost;
+    const card  = document.createElement('div');
+    card.className = 'upgrade-card'+(isMax?' maxed':ok?' can-buy':'');
+    const dots = cfg.levels.map((_,i) => `<div class="dot ${i<lvl?'on':''}"></div>`).join('');
+    card.innerHTML = `
+      <div class="upg-icon">${cfg.icon}</div>
+      <div class="upg-body">
+        <div class="upg-name">${cfg.name}</div>
+        <div class="upg-effect">${isMax ? '✅ Максимальный уровень' : next.fx}</div>
+        <div class="upg-dots">${dots}</div>
+      </div>
+      <div class="upg-right">
+        ${isMax
+          ? `<button class="btn-buy max">МАКС</button>`
+          : `<div class="upg-cost ${ok?'':'grey'}">🪙 ${fmt(next.cost)}</div>
+             <button class="btn-buy ${ok?'active':'disabled'}" onclick="buyUpg('${key}')" ${ok?'':'disabled'}>КУПИТЬ</button>`
+        }
+      </div>`;
+    list.appendChild(card);
   }
 }
 
 function buyUpg(key) {
-  const lvl  = G[key+'_lvl'];
-  const cfg  = CFG[key];
+  const lvl = G[key+'_lvl'];
+  const cfg = CFG[key];
   if (lvl >= cfg.levels.length) return;
   const cost = cfg.levels[lvl].cost;
-  const isSat = cfg.currency === 'sat';
-  const bal   = isSat ? G.sat : G.pts;
-  const unit  = isSat ? 'SATANDER' : 'очков';
-
-  if (bal < cost) {
-    toast(`❌ Недостаточно ${unit}!`, 'err');
-    return;
-  }
-  if (isSat) G.sat -= cost;
-  else G.pts -= cost;
+  if (G.pts < cost) { toast('❌ Недостаточно очков!', 'err'); return; }
+  G.pts -= cost;
   G[key+'_lvl']++;
   save();
   toast('✅ Улучшение куплено!', 'ok');
@@ -1056,104 +559,57 @@ function buyUpg(key) {
   updateUI();
 }
 
-// ═══════════════════════════════════════
-// ОБМЕН
-// ═══════════════════════════════════════
-function setMax() {
-  document.getElementById('aInput').value = Math.floor(G.pts / RATE);
-}
-
-function doExchange() {
-  const w   = document.getElementById('wInput').value.trim();
-  const amt = parseInt(document.getElementById('aInput').value)||0;
-  const avail = Math.floor(G.pts / RATE);
-
-  if (!w.startsWith('0x') || w.length < 30) { toast('❌ Неверный адрес кошелька (начинается с 0x)','err'); return; }
-  if (amt < 1)     { toast('❌ Введи количество токенов','err'); return; }
-  if (amt > avail) { toast('❌ Недостаточно очков','err'); return; }
-
-  G.pts -= amt * RATE;
-  G.sat += amt;
-  G.tokensGot += amt;
-  save();
-
-  if (window.Telegram?.WebApp) {
-    window.Telegram.WebApp.sendData(JSON.stringify({action:'exchange',wallet:w,tokens:amt}));
-  }
-
-  toast(`✅ Заявка на ${amt} SATANDER отправлена!`,'ok');
-  document.getElementById('wInput').value = '';
-  document.getElementById('aInput').value = '';
-  updateUI();
-}
-
-// ═══════════════════════════════════════
-// UI UPDATE
-// ═══════════════════════════════════════
+// ── UI UPDATE ─────────────────────────────────
 function updateUI() {
   const autoEarned = tick();
-  if (autoEarned > 0) toast(`🤖 Автотап: +${fmt(autoEarned)} очков`,'ok');
+  if (autoEarned > 0) toast(`🤖 Автотап: +${fmt(autoEarned)} очков`, 'ok');
 
   const pts = Math.floor(G.pts);
   const e   = Math.min(G.energy, maxE());
   const me  = maxE();
 
-  // balance
   document.getElementById('balAmount').textContent = fmt(pts);
-  document.getElementById('balSat').textContent = fmt(G.sat||0);
+  document.getElementById('eFill').style.width     = (e/me*100).toFixed(1)+'%';
+  document.getElementById('eLabel').textContent    = `${e}/${me}`;
 
-  // energy
-  document.getElementById('eFill').style.width = (e/me*100).toFixed(1)+'%';
-  document.getElementById('eLabel').textContent = `${e}/${me}`;
-
-  // energy timer
-  const me2 = maxE();
-  const e2  = Math.min(G.energy, me2);
-  if (e2 >= me2) {
-    // энергия полная — таймер скрыт
+  // таймер энергии
+  if (e >= me) {
     document.getElementById('eTimerRow').style.opacity = '0.4';
-    document.getElementById('eTimerText').textContent = '🔋 Энергия полная';
-    document.getElementById('eTimerFill').style.width = '100%';
+    document.getElementById('eTimerText').textContent  = '🔋 Энергия полная';
+    document.getElementById('eTimerFill').style.width  = '100%';
   } else {
-    // секунд на 1 единицу = 3600 / REGEN_H
     const secsPerUnit = Math.round(3600 / REGEN_H);
-    const now2 = Date.now();
-    const secsSinceRegen = ((now2 - G.eTs) / 1000) % secsPerUnit;
-    const secsLeft = Math.ceil(secsPerUnit - secsSinceRegen);
-    const pct = ((secsPerUnit - secsLeft) / secsPerUnit * 100).toFixed(1);
+    const secsSince   = ((Date.now() - G.eTs) / 1000) % secsPerUnit;
+    const secsLeft    = Math.ceil(secsPerUnit - secsSince);
+    const pct         = ((secsPerUnit - secsLeft) / secsPerUnit * 100).toFixed(1);
     document.getElementById('eTimerRow').style.opacity = '1';
-    document.getElementById('eTimerText').textContent = `+1 через ${secsLeft}с`;
-    document.getElementById('eTimerFill').style.width = pct + '%';
+    document.getElementById('eTimerText').textContent  = `+1 через ${secsLeft}с`;
+    document.getElementById('eTimerFill').style.width  = pct+'%';
   }
+
+  // чипы
   document.getElementById('chipTap').textContent  = '+'+fmt(tapPt());
   document.getElementById('chipAuto').textContent = fmt(autoH());
   document.getElementById('chipMult').textContent = '×'+mult();
 
-  // exchange
-  document.getElementById('availTok').textContent = Math.floor(pts/RATE);
-
-  // profile
+  // профиль
   document.getElementById('pBal').textContent    = fmt(pts);
   document.getElementById('pTotal').textContent  = fmt(G.total);
-  document.getElementById('pTokens').textContent = fmt(G.sat||0);
-  document.getElementById('pRefs').textContent   = G.refs||0;
+  document.getElementById('pRefs').textContent   = G.refs   || 0;
+  document.getElementById('pRefPts').textContent = fmt(G.refPts || 0);
 }
 
-// ═══════════════════════════════════════
-// НАВИГАЦИЯ
-// ═══════════════════════════════════════
+// ── НАВИГАЦИЯ ─────────────────────────────────
 function goTab(name, el) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.screen').forEach(s  => s.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
   document.getElementById('s-'+name).classList.add('active');
   el.classList.add('active');
-  if (name==='upgrades') renderUpgrades();
+  if (name === 'upgrades') renderUpgrades();
   document.querySelector('.screens').scrollTop = 0;
 }
 
-// ═══════════════════════════════════════
-// TOAST
-// ═══════════════════════════════════════
+// ── TOAST ─────────────────────────────────────
 function toast(msg, type='') {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -1162,52 +618,45 @@ function toast(msg, type='') {
   t._t = setTimeout(() => t.className='toast', 2500);
 }
 
-// ═══════════════════════════════════════
-// РЕФЕРАЛКА
-// ═══════════════════════════════════════
+// ── РЕФЕРАЛКА ─────────────────────────────────
 function copyRef() {
   const link = document.getElementById('refLink').textContent;
   navigator.clipboard?.writeText(link)
-    .then(() => toast('📋 Ссылка скопирована!','ok'))
+    .then(() => toast('📋 Ссылка скопирована!', 'ok'))
     .catch(() => {
-      // fallback для мобильных
       const el = document.createElement('textarea');
       el.value = link;
       document.body.appendChild(el);
       el.select();
       document.execCommand('copy');
       document.body.removeChild(el);
-      toast('📋 Ссылка скопирована!','ok');
+      toast('📋 Ссылка скопирована!', 'ok');
     });
 }
 
-// Проверка реферала при старте
 function checkRefBonus() {
   const tg = window.Telegram?.WebApp;
   if (!tg) return;
   const startParam = tg.initDataUnsafe?.start_param || '';
-  if (startParam.startsWith('ref')) {
-    const refId = startParam.replace('ref','');
-    const myId  = tg.initDataUnsafe?.user?.id?.toString() || '';
-    // Не начисляем самому себе
-    if (refId && refId !== myId) {
-      const key = 'ref_bonus_' + refId;
-      if (!localStorage.getItem(key)) {
-        // Сообщаем боту о реферале
-        tg.sendData(JSON.stringify({action:'referral', referrer: refId}));
-        localStorage.setItem(key, '1');
-      }
-    }
-  }
+  if (!startParam.startsWith('ref')) return;
+  const refId = startParam.replace('ref', '');
+  const myId  = String(tg.initDataUnsafe?.user?.id || '');
+  if (!refId || refId === myId) return;
+  const key = 'ref_done_'+refId;
+  if (localStorage.getItem(key)) return;
+  tg.sendData(JSON.stringify({action:'referral', referrer:refId}));
+  localStorage.setItem(key, '1');
+  // Начисляем бонус себе сразу
+  G.pts    += REF_BONUS;
+  G.total  += REF_BONUS;
+  G.refs    = (G.refs   || 0) + 1;
+  G.refPts  = (G.refPts || 0) + REF_BONUS;
+  save();
+  toast(`🎉 +${REF_BONUS} очков за реферала!`, 'ok');
+  updateUI();
 }
 
-// ═══════════════════════════════════════
-// TELEGRAM INIT
-// ═══════════════════════════════════════
-
-// ⚠️ ЗАМЕНИ на username своего бота:
-const BOT_USERNAME = 'Satander_gamesbot';
-
+// ── TELEGRAM INIT ─────────────────────────────
 function init() {
   const tg = window.Telegram?.WebApp;
   if (tg) {
@@ -1217,22 +666,17 @@ function init() {
     tg.setBackgroundColor?.('#1c1033');
     const u = tg.initDataUnsafe?.user;
     if (u) {
-      const n = u.first_name || 'Игрок';
-      document.getElementById('uName').textContent = n;
-      document.getElementById('pName').textContent = n;
-      document.getElementById('pId').textContent   = 'ID: ' + u.id;
-      document.getElementById('refLink').textContent =
-        `https://t.me/${BOT_USERNAME}?start=ref${u.id}`;
+      document.getElementById('uName').textContent = u.first_name || 'Игрок';
+      document.getElementById('pName').textContent = u.first_name || 'Игрок';
+      document.getElementById('pId').textContent   = 'ID: '+u.id;
+      document.getElementById('refLink').textContent = `https://t.me/${BOT_USERNAME}?start=ref${u.id}`;
     } else {
-      document.getElementById('refLink').textContent =
-        `https://t.me/${BOT_USERNAME}?start=ref0`;
+      document.getElementById('refLink').textContent = `https://t.me/${BOT_USERNAME}?start=ref0`;
     }
     checkRefBonus();
   } else {
-    document.getElementById('refLink').textContent =
-      'Открой в Telegram для реферальной ссылки';
+    document.getElementById('refLink').textContent = 'Открой в Telegram для ссылки';
   }
-
   updateUI();
   setInterval(updateUI, 1000);
 }
