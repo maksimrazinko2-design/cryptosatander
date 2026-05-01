@@ -20,16 +20,12 @@ html,body{height:100%;overflow:hidden;}
 body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;}
 .bg-glow{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 70% 40% at 50% 0%,rgba(139,92,246,0.25) 0%,transparent 70%),radial-gradient(ellipse 50% 30% at 10% 80%,rgba(59,130,246,0.12) 0%,transparent 60%),radial-gradient(ellipse 40% 25% at 90% 60%,rgba(139,92,246,0.1) 0%,transparent 60%);}
 .app{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;max-width:480px;margin:0 auto;width:100%;}
-
-/* HEADER */
 .header{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(28,16,51,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
 .logo{font-family:'Space Mono',monospace;font-size:19px;font-weight:700;letter-spacing:2px;}
 .logo b{color:var(--blue2);}
 .user-info{display:flex;align-items:center;gap:8px;}
 .user-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--blue));display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 0 12px rgba(139,92,246,0.5);}
 .user-name{font-size:14px;font-weight:700;color:var(--text2);}
-
-/* BALANCE */
 .balance-bar{flex-shrink:0;display:flex;align-items:center;justify-content:center;gap:12px;padding:14px 16px;background:var(--bg2);border-bottom:1px solid var(--border);position:relative;}
 .balance-coin{font-size:28px;filter:drop-shadow(0 0 8px rgba(251,191,36,0.8));}
 .balance-info{text-align:center;}
@@ -37,15 +33,11 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);disp
 .balance-label{font-size:10px;color:var(--text3);letter-spacing:1px;margin-top:2px;}
 .balance-change{position:absolute;right:16px;font-size:13px;font-weight:800;color:var(--green);opacity:0;transition:opacity 0.3s;}
 .balance-change.show{opacity:1;}
-
-/* SCREENS */
 .screens{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;}
 .screens::-webkit-scrollbar{display:none;}
 .screen{display:none;padding:16px;}
 .screen.active{display:flex;flex-direction:column;}
 #s-tap{padding:12px 16px;}
-
-/* ENERGY */
 .energy-row{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;background:var(--bg2);border-radius:16px;border:1px solid var(--border);padding:10px 14px;}
 .energy-top{display:flex;align-items:center;gap:10px;}
 .energy-bolt{font-size:18px;}
@@ -57,8 +49,6 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);disp
 .energy-timer-text{font-family:'Space Mono',monospace;font-size:11px;color:var(--blue2);white-space:nowrap;min-width:110px;}
 .energy-timer-track{flex:1;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;}
 .energy-timer-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--blue2),var(--purple2));transition:width 0.9s linear;}
-
-/* TAP */
 .tap-zone{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding-bottom:16px;}
 .tap-ring-outer{position:relative;width:236px;height:236px;margin:0 auto 24px;}
 .tap-ring-outer::before{content:'';position:absolute;inset:0;border-radius:50%;padding:3px;background:conic-gradient(var(--blue) 0%,var(--purple) 25%,var(--blue2) 50%,var(--purple2) 75%,var(--blue) 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:spin 5s linear infinite;opacity:0.8;}
@@ -72,12 +62,8 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);disp
 .tap-chip .chip-icon{font-size:14px;}
 .tap-chip .chip-val{color:var(--blue2);font-family:'Space Mono',monospace;font-size:12px;}
 .tap-chip .chip-lbl{color:var(--text3);font-size:10px;}
-
-/* FLOAT */
 .float-pts{position:fixed;font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:var(--gold);text-shadow:0 0 12px rgba(251,191,36,0.7);pointer-events:none;z-index:999;animation:floatUp 0.9s ease-out forwards;}
 @keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(1);}80%{opacity:1;}100%{opacity:0;transform:translateY(-90px) scale(1.2);}}
-
-/* UPGRADES */
 .screen-title{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:14px;}
 .upgrade-card{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:14px;transition:border-color 0.2s,background 0.2s;}
 .upgrade-card.can-buy{border-color:rgba(59,130,246,0.5);background:linear-gradient(135deg,rgba(59,130,246,0.06),var(--bg2));}
@@ -97,8 +83,6 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);disp
 .btn-buy.active:active{transform:scale(0.95);}
 .btn-buy.disabled{background:var(--bg4);color:var(--text3);cursor:not-allowed;}
 .btn-buy.max{background:rgba(52,211,153,0.15);color:var(--green);cursor:default;border:1px solid rgba(52,211,153,0.3);}
-
-/* PROFILE */
 .profile-top{text-align:center;background:var(--bg2);border:1px solid var(--border);border-radius:22px;padding:24px 16px 20px;margin-bottom:14px;}
 .profile-ava{width:76px;height:76px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 12px;box-shadow:0 0 24px rgba(59,130,246,0.5),0 0 48px rgba(139,92,246,0.3);}
 .profile-name{font-size:20px;font-weight:900;margin-bottom:4px;}
@@ -108,30 +92,35 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);disp
 .stat-box-icon{font-size:20px;margin-bottom:6px;}
 .stat-box-val{font-family:'Space Mono',monospace;font-size:18px;font-weight:700;margin-bottom:2px;}
 .stat-box-lbl{font-size:11px;color:var(--text3);font-weight:700;letter-spacing:0.5px;}
-.ref-box{background:var(--bg2);border:1px solid var(--border-b);border-radius:20px;padding:18px;}
+.refs-list-box{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:18px;margin-bottom:14px;}
+.refs-list-title{font-size:15px;font-weight:800;color:var(--blue2);margin-bottom:12px;}
+.ref-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(139,92,246,0.1);}
+.ref-item:last-child{border-bottom:none;padding-bottom:0;}
+.ref-item-ava{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--blue));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.ref-item-info{flex:1;min-width:0;}
+.ref-item-name{font-size:14px;font-weight:800;color:var(--text);}
+.ref-item-username{font-size:12px;color:var(--text3);margin-top:2px;}
+.ref-item-bonus{font-size:13px;font-weight:800;color:var(--green);}
+.ref-item-date{font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;white-space:nowrap;}
+.refs-empty{text-align:center;color:var(--text3);font-size:14px;padding:20px 0;}
+.ref-box{background:var(--bg2);border:1px solid var(--border-b);border-radius:20px;padding:18px;margin-bottom:14px;}
 .ref-box-title{font-size:15px;font-weight:800;color:var(--blue2);margin-bottom:6px;}
 .ref-box-desc{font-size:13px;color:var(--text2);font-weight:600;line-height:1.5;margin-bottom:14px;}
 .ref-box-desc b{color:var(--gold);}
 .ref-link-box{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:10px 14px;font-family:'Space Mono',monospace;font-size:11px;color:var(--purple3);word-break:break-all;margin-bottom:10px;line-height:1.4;}
 .btn-copy{width:100%;padding:13px;background:rgba(139,92,246,0.15);border:1px solid var(--border);border-radius:14px;color:var(--purple3);font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer;letter-spacing:0.5px;transition:background 0.15s;}
 .btn-copy:active{background:rgba(139,92,246,0.3);}
-
-/* BONUS BANNER */
 .bonus-banner{display:none;align-items:center;justify-content:center;gap:10px;padding:10px 16px;background:linear-gradient(135deg,rgba(52,211,153,0.2),rgba(59,130,246,0.15));border-bottom:1px solid rgba(52,211,153,0.4);animation:pulse 2s ease-in-out infinite;}
 .bonus-banner.show{display:flex;}
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.7;}}
 .bonus-text{font-size:13px;font-weight:800;color:var(--green);}
 .btn-claim{padding:6px 14px;background:var(--green);border:none;border-radius:10px;color:#000;font-family:'Nunito',sans-serif;font-size:12px;font-weight:900;cursor:pointer;}
-
-/* NAV */
 .nav{flex-shrink:0;display:flex;background:rgba(24,14,46,0.97);backdrop-filter:blur(20px);border-top:1px solid var(--border);}
 .nav-item{flex:1;padding:10px 4px 13px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;border:none;background:transparent;color:var(--text3);transition:color 0.2s;position:relative;}
 .nav-item.active{color:var(--text);}
 .nav-item.active::after{content:'';position:absolute;bottom:0;left:25%;right:25%;height:2px;background:linear-gradient(90deg,var(--blue),var(--purple2));border-radius:2px 2px 0 0;}
 .nav-icon{font-size:22px;line-height:1;}
 .nav-lbl{font-size:10px;font-weight:800;letter-spacing:0.5px;}
-
-/* TOAST */
 .toast{position:fixed;bottom:82px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:11px 22px;font-size:14px;font-weight:700;opacity:0;transition:all 0.25s;z-index:200;white-space:nowrap;pointer-events:none;box-shadow:0 8px 32px rgba(0,0,0,0.4);}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 .toast.ok{color:var(--green);border-color:rgba(52,211,153,0.4);}
@@ -142,7 +131,6 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);disp
 <div class="bg-glow"></div>
 <div class="app">
 
-  <!-- HEADER -->
   <div class="header">
     <div class="logo">SAT<b>ANDER</b></div>
     <div class="user-info">
@@ -151,13 +139,11 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);disp
     </div>
   </div>
 
-  <!-- BONUS BANNER (появляется когда есть бонусы) -->
   <div class="bonus-banner" id="bonusBanner">
     <span class="bonus-text" id="bonusText">🎁 +50 очков за реферала!</span>
     <button class="btn-claim" onclick="claimBonus()">Забрать!</button>
   </div>
 
-  <!-- BALANCE -->
   <div class="balance-bar">
     <div class="balance-coin">🪙</div>
     <div class="balance-info">
@@ -167,10 +153,8 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);disp
     <div class="balance-change" id="balChange">+0</div>
   </div>
 
-  <!-- SCREENS -->
   <div class="screens">
 
-    <!-- TAP -->
     <div class="screen active" id="s-tap">
       <div class="energy-row">
         <div class="energy-top">
@@ -215,18 +199,16 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);disp
       </div>
     </div>
 
-    <!-- UPGRADES -->
     <div class="screen" id="s-upgrades">
       <div class="screen-title">Улучшения</div>
       <div id="upgList"></div>
     </div>
 
-    <!-- PROFILE -->
     <div class="screen" id="s-profile">
       <div class="profile-top">
         <div class="profile-ava">🪐</div>
         <div class="profile-name" id="pName">Игрок</div>
-        <div class="profile-sub"  id="pId">ID: —</div>
+        <div class="profile-sub" id="pId">ID: —</div>
       </div>
       <div class="stats-grid">
         <div class="stat-box">
@@ -250,8 +232,14 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);disp
           <div class="stat-box-lbl">Очков с рефералов</div>
         </div>
       </div>
+
+      <div class="refs-list-box">
+        <div class="refs-list-title">👥 Мои рефералы</div>
+        <div id="refsList"><div class="refs-empty">Загрузка...</div></div>
+      </div>
+
       <div class="ref-box">
-        <div class="ref-box-title">👥 Приглашай друзей</div>
+        <div class="ref-box-title">🔗 Пригласи друга</div>
         <div class="ref-box-desc">Получай <b>50 очков</b> за каждого друга который зайдёт по твоей ссылке!</div>
         <div class="ref-link-box" id="refLink">Загрузка...</div>
         <button class="btn-copy" onclick="copyRef()">📋 Скопировать ссылку</button>
@@ -260,7 +248,6 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);disp
 
   </div>
 
-  <!-- NAV -->
   <div class="nav">
     <button class="nav-item active" onclick="goTab('tap',this)">
       <span class="nav-icon">👆</span>
@@ -280,21 +267,19 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);disp
 <div class="toast" id="toast"></div>
 
 <script>
-// ⚠️ ЗАМЕНИ на username своего бота (без @)
 const BOT_USERNAME = 'Satander_gamesbot';
 const REF_BONUS    = 50;
 const API_URL      = 'https://worker-production-8e02.up.railway.app';
 
-// ── КОНФИГ УЛУЧШЕНИЙ ────────────────────────
 const CFG = {
   tap_power: {
     name:'Сила тапа', icon:'⚡',
     levels:[
-      {cost:250,  value:2,  fx:'+1 очко/тап'},
-      {cost:405,  value:3,  fx:'+2 очка/тап'},
-      {cost:655,  value:4,  fx:'+3 очка/тап'},
-      {cost:1060, value:6,  fx:'+5 очков/тап'},
-      {cost:1715, value:8,  fx:'+7 очков/тап'},
+      {cost:250,  value:2, fx:'+1 очко/тап'},
+      {cost:405,  value:3, fx:'+2 очка/тап'},
+      {cost:655,  value:4, fx:'+3 очка/тап'},
+      {cost:1060, value:6, fx:'+5 очков/тап'},
+      {cost:1715, value:8, fx:'+7 очков/тап'},
     ]
   },
   energy: {
@@ -332,7 +317,6 @@ const CFG = {
 const BASE_E  = 100;
 const REGEN_H = 100;
 
-// ── STATE ────────────────────────────────────
 function loadState() {
   const def = {
     pts:0, total:0, refs:0, refPts:0,
@@ -347,7 +331,6 @@ let G = loadState();
 let tgUserId = 0;
 let pendingBonus = 0;
 
-// ── ГЕТТЕРЫ ──────────────────────────────────
 const mult  = () => G.multiplier_lvl ? CFG.multiplier.levels[G.multiplier_lvl-1].value : 1;
 const tapPt = () => (G.tap_power_lvl ? CFG.tap_power.levels[G.tap_power_lvl-1].value : 1) * mult();
 const maxE  = () => G.energy_lvl ? CFG.energy.levels[G.energy_lvl-1].value : BASE_E;
@@ -360,7 +343,6 @@ function fmt(n) {
   return ''+n;
 }
 
-// ── ЭНЕРГИЯ + АВТОТАП ────────────────────────
 function tick() {
   const now   = Date.now();
   const hrs   = (now - G.eTs) / 3600000;
@@ -375,7 +357,6 @@ function tick() {
   return 0;
 }
 
-// ── ТАП ──────────────────────────────────────
 let lastTap = 0;
 function onTap(e) {
   e.preventDefault();
@@ -411,7 +392,6 @@ function spawnFloat(x, y, txt) {
   setTimeout(() => el.remove(), 950);
 }
 
-// ── АПГРЕЙДЫ ─────────────────────────────────
 function renderUpgrades() {
   const list = document.getElementById('upgList');
   list.innerHTML = '';
@@ -450,12 +430,12 @@ function buyUpg(key) {
   G.pts -= cost;
   G[key+'_lvl']++;
   save();
+  saveToServer();
   toast('✅ Улучшение куплено!', 'ok');
   renderUpgrades();
   updateUI();
 }
 
-// ── БОНУСНЫЙ БАННЕР ──────────────────────────
 async function checkPendingBonus() {
   if (!tgUserId) return;
   try {
@@ -465,15 +445,12 @@ async function checkPendingBonus() {
       pendingBonus = d.pending_pts;
       document.getElementById('bonusText').textContent = `🎁 +${d.pending_pts} очков за рефералов!`;
       document.getElementById('bonusBanner').classList.add('show');
-      // Обновляем статистику из БД
       G.refs   = d.refs_count    || G.refs;
       G.refPts = d.ref_pts_total || G.refPts;
       save();
       updateUI();
     }
-  } catch (e) {
-    console.log('API недоступен, работаем офлайн');
-  }
+  } catch(e) { console.log('API офлайн'); }
 }
 
 async function claimBonus() {
@@ -487,30 +464,96 @@ async function claimBonus() {
       G.refs    = d.refs_count    || G.refs;
       G.refPts  = d.ref_pts_total || G.refPts;
       save();
+      saveToServer();
       document.getElementById('bonusBanner').classList.remove('show');
       pendingBonus = 0;
       spawnFloat(window.innerWidth/2, window.innerHeight/2, '+'+fmt(d.bonus_pts));
       toast(`🎉 +${d.bonus_pts} очков получено!`, 'ok');
       updateUI();
     }
-  } catch (e) {
-    toast('❌ Ошибка сети', 'err');
+  } catch(e) { toast('❌ Ошибка сети', 'err'); }
+}
+
+async function loadRefsList() {
+  if (!tgUserId) return;
+  const el = document.getElementById('refsList');
+  try {
+    const r = await fetch(`${API_URL}/api/refs_list?user_id=${tgUserId}`);
+    const d = await r.json();
+    if (d.ok && d.refs && d.refs.length > 0) {
+      el.innerHTML = d.refs.map(ref => `
+        <div class="ref-item">
+          <div class="ref-item-ava">👤</div>
+          <div class="ref-item-info">
+            <div class="ref-item-name">${ref.first_name}</div>
+            <div class="ref-item-username">${ref.username ? '@'+ref.username : 'без username'}</div>
+          </div>
+          <div style="text-align:right">
+            <div class="ref-item-bonus">+${REF_BONUS} 🪙</div>
+            <div class="ref-item-date">${ref.joined}</div>
+          </div>
+        </div>
+      `).join('');
+    } else {
+      el.innerHTML = '<div class="refs-empty">Пока нет рефералов 😔<br>Поделись ссылкой!</div>';
+    }
+  } catch(e) {
+    el.innerHTML = '<div class="refs-empty">Ошибка загрузки</div>';
   }
 }
 
-// ── UI UPDATE ─────────────────────────────────
+async function saveToServer() {
+  if (!tgUserId) return;
+  try {
+    await fetch(`${API_URL}/api/save?user_id=${tgUserId}`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        pts:            G.pts,
+        total:          G.total,
+        energy:         G.energy,
+        eTs:            G.eTs,
+        autoTs:         G.autoTs,
+        tap_power_lvl:  G.tap_power_lvl,
+        autotap_lvl:    G.autotap_lvl,
+        multiplier_lvl: G.multiplier_lvl,
+        energy_lvl:     G.energy_lvl,
+      })
+    });
+  } catch(e) { console.log('Сохранение офлайн'); }
+}
+
+async function loadFromServer() {
+  try {
+    const r = await fetch(`${API_URL}/api/load?user_id=${tgUserId}`);
+    const d = await r.json();
+    if (d.ok && d.state) {
+      const s = d.state;
+      G.pts            = Math.max(G.pts,   parseFloat(s.pts)   || 0);
+      G.total          = Math.max(G.total, parseFloat(s.total) || 0);
+      G.tap_power_lvl  = Math.max(G.tap_power_lvl,  parseInt(s.tap_power_lvl)  || 0);
+      G.autotap_lvl    = Math.max(G.autotap_lvl,    parseInt(s.autotap_lvl)    || 0);
+      G.multiplier_lvl = Math.max(G.multiplier_lvl, parseInt(s.multiplier_lvl) || 0);
+      G.energy_lvl     = Math.max(G.energy_lvl,     parseInt(s.energy_lvl)     || 0);
+      if ((parseInt(s.e_ts) || 0) > G.eTs) {
+        G.energy = parseFloat(s.energy) || G.energy;
+        G.eTs    = parseInt(s.e_ts)     || G.eTs;
+        G.autoTs = parseInt(s.auto_ts)  || G.autoTs;
+      }
+      save();
+    }
+  } catch(e) { console.log('Загрузка офлайн — используем localStorage'); }
+}
+
 function updateUI() {
   const autoEarned = tick();
   if (autoEarned > 0) toast(`🤖 Автотап: +${fmt(autoEarned)} очков`, 'ok');
-
   const pts = Math.floor(G.pts);
   const e   = Math.min(G.energy, maxE());
   const me  = maxE();
-
   document.getElementById('balAmount').textContent = fmt(pts);
   document.getElementById('eFill').style.width     = (e/me*100).toFixed(1)+'%';
   document.getElementById('eLabel').textContent    = `${e}/${me}`;
-
   if (e >= me) {
     document.getElementById('eTimerRow').style.opacity = '0.4';
     document.getElementById('eTimerText').textContent  = '🔋 Энергия полная';
@@ -524,28 +567,25 @@ function updateUI() {
     document.getElementById('eTimerText').textContent  = `+1 через ${secsLeft}с`;
     document.getElementById('eTimerFill').style.width  = pct+'%';
   }
-
   document.getElementById('chipTap').textContent  = '+'+fmt(tapPt());
   document.getElementById('chipAuto').textContent = fmt(autoH());
   document.getElementById('chipMult').textContent = '×'+mult();
-
-  document.getElementById('pBal').textContent    = fmt(pts);
-  document.getElementById('pTotal').textContent  = fmt(G.total);
-  document.getElementById('pRefs').textContent   = G.refs   || 0;
-  document.getElementById('pRefPts').textContent = fmt(G.refPts || 0);
+  document.getElementById('pBal').textContent     = fmt(pts);
+  document.getElementById('pTotal').textContent   = fmt(G.total);
+  document.getElementById('pRefs').textContent    = G.refs   || 0;
+  document.getElementById('pRefPts').textContent  = fmt(G.refPts || 0);
 }
 
-// ── НАВИГАЦИЯ ─────────────────────────────────
 function goTab(name, el) {
   document.querySelectorAll('.screen').forEach(s  => s.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
   document.getElementById('s-'+name).classList.add('active');
   el.classList.add('active');
   if (name === 'upgrades') renderUpgrades();
+  if (name === 'profile')  loadRefsList();
   document.querySelector('.screens').scrollTop = 0;
 }
 
-// ── TOAST ─────────────────────────────────────
 function toast(msg, type='') {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -554,7 +594,6 @@ function toast(msg, type='') {
   t._t = setTimeout(() => t.className='toast', 2500);
 }
 
-// ── РЕФЕРАЛКА ─────────────────────────────────
 function copyRef() {
   const link = document.getElementById('refLink').textContent;
   navigator.clipboard?.writeText(link)
@@ -584,8 +623,7 @@ function checkRefBonus() {
   localStorage.setItem(key, '1');
 }
 
-// ── TELEGRAM INIT ─────────────────────────────
-function init() {
+async function init() {
   const tg = window.Telegram?.WebApp;
   if (tg) {
     tg.ready();
@@ -600,9 +638,8 @@ function init() {
       document.getElementById('pId').textContent   = 'ID: '+u.id;
       document.getElementById('refLink').textContent =
         `https://t.me/${BOT_USERNAME}?start=ref${u.id}`;
-      // Проверяем реферала
+      await loadFromServer();
       checkRefBonus();
-      // Проверяем бонусы через 1 секунду после загрузки
       setTimeout(checkPendingBonus, 1000);
     } else {
       document.getElementById('refLink').textContent =
@@ -613,8 +650,8 @@ function init() {
   }
   updateUI();
   setInterval(updateUI, 1000);
-  // Проверяем бонусы каждые 30 секунд
   setInterval(checkPendingBonus, 30000);
+  setInterval(saveToServer, 10000);
 }
 
 init();
