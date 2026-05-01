@@ -14,10 +14,9 @@ DATABASE_URL = os.getenv("DATABASE_URL", "")
 PORT         = int(os.getenv("PORT", 8080))
 REF_BONUS    = 50
 
-# CORS — объявляем ДО API функций
 CORS = {
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
 }
 
@@ -56,6 +55,21 @@ async def init_db():
                 created_at TIMESTAMP DEFAULT NOW()
             )
         """)
+        await conn.execute("""
+            CREATE TABLE IF NOT EXISTS game_state (
+                user_id        BIGINT PRIMARY KEY,
+                pts            FLOAT DEFAULT 0,
+                total          FLOAT DEFAULT 0,
+                energy         FLOAT DEFAULT 100,
+                e_ts           BIGINT DEFAULT 0,
+                auto_ts        BIGINT DEFAULT 0,
+                tap_power_lvl  INTEGER DEFAULT 0,
+                autotap_lvl    INTEGER DEFAULT 0,
+                multiplier_lvl INTEGER DEFAULT 0,
+                energy_lvl     INTEGER DEFAULT 0,
+                updated_at     TIMESTAMP DEFAULT NOW()
+            )
+        """)
         logging.info("DB initialized!")
     finally:
         await conn.close()
@@ -74,34 +88,22 @@ async def get_or_create_user(user_id, username='', first_name=''):
 async def add_referral(referrer_id, referee_id):
     conn = await get_db()
     try:
-        # Проверяем — был ли уже такой реферал
         existing = await conn.fetchval("""
             SELECT id FROM referrals WHERE referrer_id=$1 AND referee_id=$2
         """, referrer_id, referee_id)
-
         if existing:
-            return False  # уже было, не начисляем
-
-        # Вставляем новый реферал
+            return False
         await conn.execute("""
-            INSERT INTO referrals (referrer_id, referee_id)
-            VALUES ($1, $2)
+            INSERT INTO referrals (referrer_id, referee_id) VALUES ($1, $2)
         """, referrer_id, referee_id)
-
-        # Начисляем очки рефереру
         await conn.execute("""
-            UPDATE users SET ref_pts=ref_pts+$1, refs_count=refs_count+1
-            WHERE user_id=$2
+            UPDATE users SET ref_pts=ref_pts+$1, refs_count=refs_count+1 WHERE user_id=$2
         """, REF_BONUS, referrer_id)
-
-        # Добавляем в pending_bonuses
         await conn.execute("""
             INSERT INTO pending_bonuses (user_id, pts) VALUES ($1, $2)
         """, referrer_id, REF_BONUS)
-
         logging.info(f"Referral added: referrer={referrer_id}, referee={referee_id}, bonus={REF_BONUS}")
         return True
-
     except Exception as e:
         logging.error(f"add_referral error: {e}")
         return False
@@ -145,6 +147,9 @@ async def get_user_stats(user_id):
     finally:
         await conn.close()
 
+async def api_options(request):
+    return web.Response(headers={**CORS, 'Allow': 'GET, POST, OPTIONS'})
+
 async def api_claim(request):
     try:
         user_id = int(request.rel_url.query.get('user_id', 0))
@@ -178,11 +183,96 @@ async def api_stats(request):
 async def api_health(request):
     return web.json_response({'ok': True, 'status': 'alive'}, headers=CORS)
 
+async def api_refs_list(request):
+    try:
+        user_id = int(request.rel_url.query.get('user_id', 0))
+        if not user_id:
+            return web.json_response({'ok': False}, headers=CORS)
+        conn = await get_db()
+        try:
+            rows = await conn.fetch("""
+                SELECT u.user_id, u.first_name, u.username, r.created_at
+                FROM referrals r
+                JOIN users u ON u.user_id = r.referee_id
+                WHERE r.referrer_id = $1
+                ORDER BY r.created_at DESC
+            """, user_id)
+            refs = []
+            for row in rows:
+                refs.append({
+                    'user_id':    row['user_id'],
+                    'first_name': row['first_name'] or 'Игрок',
+                    'username':   row['username'] or '',
+                    'joined':     row['created_at'].strftime('%d.%m.%Y'),
+                })
+            return web.json_response({'ok': True, 'refs': refs}, headers=CORS)
+        finally:
+            await conn.close()
+    except Exception as e:
+        return web.json_response({'ok': False, 'error': str(e)}, headers=CORS)
+
+async def api_save(request):
+    try:
+        user_id = int(request.rel_url.query.get('user_id', 0))
+        if not user_id:
+            return web.json_response({'ok': False}, headers=CORS)
+        body = await request.json()
+        conn = await get_db()
+        try:
+            await conn.execute("""
+                INSERT INTO game_state (
+                    user_id, pts, total, energy, e_ts, auto_ts,
+                    tap_power_lvl, autotap_lvl, multiplier_lvl, energy_lvl, updated_at
+                ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,NOW())
+                ON CONFLICT (user_id) DO UPDATE SET
+                    pts=$2, total=$3, energy=$4, e_ts=$5, auto_ts=$6,
+                    tap_power_lvl=$7, autotap_lvl=$8, multiplier_lvl=$9, energy_lvl=$10,
+                    updated_at=NOW()
+            """,
+            user_id,
+            float(body.get('pts', 0)),
+            float(body.get('total', 0)),
+            float(body.get('energy', 100)),
+            int(body.get('eTs', 0)),
+            int(body.get('autoTs', 0)),
+            int(body.get('tap_power_lvl', 0)),
+            int(body.get('autotap_lvl', 0)),
+            int(body.get('multiplier_lvl', 0)),
+            int(body.get('energy_lvl', 0)),
+            )
+            return web.json_response({'ok': True}, headers=CORS)
+        finally:
+            await conn.close()
+    except Exception as e:
+        return web.json_response({'ok': False, 'error': str(e)}, headers=CORS)
+
+async def api_load(request):
+    try:
+        user_id = int(request.rel_url.query.get('user_id', 0))
+        if not user_id:
+            return web.json_response({'ok': False}, headers=CORS)
+        conn = await get_db()
+        try:
+            row = await conn.fetchrow(
+                "SELECT * FROM game_state WHERE user_id=$1", user_id
+            )
+            if row:
+                return web.json_response({'ok': True, 'state': dict(row)}, headers=CORS)
+            return web.json_response({'ok': True, 'state': None}, headers=CORS)
+        finally:
+            await conn.close()
+    except Exception as e:
+        return web.json_response({'ok': False, 'error': str(e)}, headers=CORS)
+
 async def start_api_server():
     app_api = web.Application()
-    app_api.router.add_get('/api/claim',  api_claim)
-    app_api.router.add_get('/api/stats',  api_stats)
-    app_api.router.add_get('/api/health', api_health)
+    app_api.router.add_get('/api/claim',     api_claim)
+    app_api.router.add_get('/api/stats',     api_stats)
+    app_api.router.add_get('/api/health',    api_health)
+    app_api.router.add_get('/api/load',      api_load)
+    app_api.router.add_get('/api/refs_list', api_refs_list)
+    app_api.router.add_post('/api/save',     api_save)
+    app_api.router.add_options('/{path:.*}', api_options)
     runner = web.AppRunner(app_api)
     await runner.setup()
     await web.TCPSite(runner, '0.0.0.0', PORT).start()
@@ -191,7 +281,6 @@ async def start_api_server():
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
     await get_or_create_user(user.id, user.username, user.first_name)
-
     if context.args and context.args[0].startswith('ref'):
         try:
             referrer_id = int(context.args[0][3:])
@@ -218,7 +307,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
                         logging.warning(f"Ошибка уведомления: {e}")
         except (ValueError, IndexError):
             pass
-
     stats = await get_user_stats(user.id)
     ref_text = f"\n👥 Твоих рефералов: <b>{stats['refs_count']}</b>" if stats['refs_count'] > 0 else ""
     await update.message.reply_html(
